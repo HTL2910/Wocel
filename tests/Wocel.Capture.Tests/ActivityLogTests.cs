@@ -13,6 +13,7 @@ public sealed class ActivityLogTests
     [InlineData("outer: inner response {\"access_token\":\"secret\"}", "outer: inner response {\"access_token\":\"[REDACTED]\"}")]
     [InlineData("{\"Authorization\":\"Bearer json-secret\"}", "{\"Authorization\":\"[REDACTED]\"}")]
     [InlineData("request failed with Bearer standalone-secret", "request failed with Bearer [REDACTED]")]
+    [InlineData("failed with key private_abcdef1234567890 in body", "failed with key [REDACTED] in body")]
     public void Redactor_removes_secrets_but_keeps_diagnostic_context(string input, string expected)
     {
         Assert.Equal(expected, SensitiveDataRedactor.Redact(input));

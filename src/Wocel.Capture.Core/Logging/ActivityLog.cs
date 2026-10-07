@@ -47,6 +47,7 @@ public static partial class SensitiveDataRedactor
 
         var redacted = AuthorizationRegex().Replace(value, "$1[REDACTED]");
         redacted = BearerRegex().Replace(redacted, "$1[REDACTED]");
+        redacted = ImageKitKeyRegex().Replace(redacted, "[REDACTED]");
         return TokenRegex().Replace(redacted, match =>
             match.Groups[1].Value + match.Groups[2].Value + "[REDACTED]");
     }
@@ -59,6 +60,9 @@ public static partial class SensitiveDataRedactor
 
     [GeneratedRegex("(access_token|refresh_token|code)(\\\"?\\s*[:=]\\s*\\\"?)([^\\\"&\\s}]+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex TokenRegex();
+
+    [GeneratedRegex(@"\bprivate_[A-Za-z0-9_\-]{8,}\b", RegexOptions.CultureInvariant)]
+    private static partial Regex ImageKitKeyRegex();
 }
 
 public sealed class NdjsonActivityLog(string directory) : IActivityLog, IActivityLogReader
