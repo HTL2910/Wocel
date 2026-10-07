@@ -1,0 +1,496 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Wocel.Shell.ViewModels"
+        xmlns:ctrl="using:Wocel.Shell.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1360" d:DesignHeight="850"
+        x:Class="Wocel.Shell.Views.MainWindow"
+        x:DataType="vm:ShellWorkspaceViewModel"
+        Title="Wocel Office 1.0 — Excel · Word · PDF Tools"
+        Width="1360" Height="850"
+        MinWidth="1000" MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        Background="#F3F3F3"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        FontFamily="Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, sans-serif">
+
+    <Grid>
+        <!-- ======================== START HUB ======================== -->
+        <Grid IsVisible="{Binding IsWelcomeScreenVisible}" ColumnDefinitions="280,*">
+            <Border Grid.Column="0" Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0" Padding="20">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,28">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Border CornerRadius="6" Width="36" Height="36" Background="#107C41">
+                                <TextBlock Text="W" Foreground="White" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Wocel Office" FontWeight="Bold" FontSize="18" Foreground="#1A1A1A"/>
+                                <TextBlock Text="Word · Excel · PDF · Bộ công cụ tệp" FontSize="12" Foreground="#616161"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Spacing="10">
+                        <TextBlock Text="CHỌN MÔ HÌNH LÀM VIỆC" FontSize="11" FontWeight="Bold" Foreground="#8A8A8A" Margin="4,0,0,4"/>
+                        <Button Name="BtnSelectExcelHub" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="14,12" CornerRadius="8" Background="#EBF7EE" BorderBrush="#107C41" BorderThickness="1.5">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border CornerRadius="5" Width="28" Height="28" Background="#107C41">
+                                    <TextBlock Text="X" Foreground="White" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Wocel Excel" FontWeight="Bold" FontSize="15" Foreground="#107C41"/>
+                                    <TextBlock Text="Bảng tính 100+ dòng &amp; Công thức (.xlsx)" FontSize="11" Foreground="#4A4A4A"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="BtnSelectWordHub" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="14,12" CornerRadius="8" Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <Border CornerRadius="5" Width="28" Height="28" Background="#185ABD">
+                                    <TextBlock Text="W" Foreground="White" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Wocel Word" FontWeight="Bold" FontSize="15" Foreground="#185ABD"/>
+                                    <TextBlock Text="Soạn thảo văn bản chuẩn A4 (.docx)" FontSize="11" Foreground="#616161"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="2" Text="v1.0.0 • 29 công cụ xử lý tệp" FontSize="11" Foreground="#A0A0A0" HorizontalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" Background="#FFFFFF" Padding="45,35">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                        <TextBlock Text="Trình soạn thảo Wocel Office" FontSize="26" FontWeight="Bold" Foreground="#1A1A1A"/>
+                        <TextBlock Text="Tạo bảng tính, soạn thảo văn bản hoặc xem tệp PDF trực tiếp." FontSize="14" Foreground="#616161" Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" Margin="0,0,0,32">
+                        <Button Name="BtnNewExcelBook" Grid.Column="0" Margin="0,0,10,0" Padding="18" Background="#F1F9F3" BorderBrush="#107C41" BorderThickness="1.5" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <StackPanel Spacing="10">
+                                <Border CornerRadius="6" Width="40" Height="40" Background="#107C41">
+                                    <TextBlock Text="X" Foreground="White" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="+ Sổ làm việc Excel" FontWeight="Bold" FontSize="15" Foreground="#107C41"/>
+                                <TextBlock Text="100 dòng, 60 FPS, hỗ trợ công thức .xlsx" FontSize="12" Foreground="#4A4A4A" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="BtnNewWordDoc" Grid.Column="1" Margin="0,0,10,0" Padding="18" Background="#F4F8FC" BorderBrush="#185ABD" BorderThickness="1" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <StackPanel Spacing="10">
+                                <Border CornerRadius="6" Width="40" Height="40" Background="#185ABD">
+                                    <TextBlock Text="W" Foreground="White" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="+ Tài liệu Word mới" FontWeight="Bold" FontSize="15" Foreground="#185ABD"/>
+                                <TextBlock Text="Soạn thảo A4, xuất .docx, .pdf" FontSize="12" Foreground="#616161" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="BtnBrowseFileFromDisk" Grid.Column="2" Margin="0,0,10,0" Padding="18" Background="#FAFAFA" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <StackPanel Spacing="10">
+                                <Border CornerRadius="6" Width="40" Height="40" Background="#4F5D73">
+                                    <TextBlock Text="📁" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Mở tệp từ máy tính..." FontWeight="Bold" FontSize="15" Foreground="#1A1A1A"/>
+                                <TextBlock Text=".xlsx .csv .docx .rtf .pdf .wocel" FontSize="12" Foreground="#616161" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="BtnOpenPdfToolsHub" Grid.Column="3" Padding="18" Background="#FBF3FA" BorderBrush="#8E44AD" BorderThickness="1.5" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <StackPanel Spacing="10">
+                                <Border CornerRadius="6" Width="40" Height="40" Background="#8E44AD">
+                                    <TextBlock Text="🛠" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Bộ công cụ xử lý tệp" FontWeight="Bold" FontSize="15" Foreground="#7D3C98"/>
+                                <TextBlock Text="Gộp, tách, nén, watermark, mật khẩu, ảnh → PDF…" FontSize="12" Foreground="#616161" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <Grid Grid.Row="2" RowDefinitions="Auto,*">
+                        <TextBlock Grid.Row="0" Text="🕒 TỆP ĐÃ MỞ GẦN ĐÂY" FontSize="12" FontWeight="Bold" Foreground="#333333" Margin="0,0,0,12"/>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Name="RecentFilesContainer" Spacing="6"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ======================== MAIN WORKSPACE ======================== -->
+        <!-- Bố cục xếp theo đúng thứ tự của Excel:
+             thanh tiêu đề · thẻ ribbon · thanh công cụ · thẻ tài liệu ·
+             thanh công thức · lưới · dải trang tính · thanh trạng thái -->
+        <Grid IsVisible="{Binding !IsWelcomeScreenVisible}" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,26">
+
+            <!-- THANH TIÊU ĐỀ — thanh lệnh nhanh bên trái, tên tài liệu ở giữa, ô tìm kiếm bên phải -->
+            <Border Name="TitleBar" Grid.Row="0" Background="#107C41" Padding="10,5">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="4">
+                        <Button Name="BtnBackToHome" Content="🏠" Width="30" Height="26" Padding="0" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="13"/>
+                        <Border Width="1" Height="18" Background="#2E8B57" Margin="4,0"/>
+                        <Button Name="BtnQuickSave" Content="💾" Width="30" Height="26" Padding="0" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="13"/>
+                        <Button Name="BtnQuickOpen" Content="📂" Width="30" Height="26" Padding="0" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="13"/>
+                        <Border Width="1" Height="18" Background="#2E8B57" Margin="4,0"/>
+                        <Button Name="BtnAddExcelTab" Content="+ Excel" Padding="8,3" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="11"/>
+                        <Button Name="BtnAddWordTab" Content="+ Word" Padding="8,3" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="11"/>
+                        <Button Name="BtnTogglePdfTools" Content="🛠 Công cụ tệp" Padding="8,3" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="11"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1" Text="{Binding ActiveTab.Title, FallbackValue='Wocel Office'}"
+                               Foreground="White" FontWeight="SemiBold" FontSize="13"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <TextBox Name="TxtSearchBox" Width="240" Height="26"
+                                 Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="4" FontSize="11"
+                                 Padding="8,3" CaretBrush="White" VerticalAlignment="Center"
+                                 Watermark="🔍 Tìm trong trang tính — Enter để tìm tiếp"/>
+
+                        <!-- Nút điều khiển cửa sổ, xếp thu nhỏ · phóng to · đóng như Windows -->
+                        <StackPanel Orientation="Horizontal" Spacing="0" Margin="8,0,0,0">
+                            <Button Name="BtnWindowMinimize" Classes="windowButton" Content="—"/>
+                            <Button Name="BtnWindowMaximize" Classes="windowButton" Content="☐"/>
+                            <Button Name="BtnWindowClose"    Classes="windowButton close" Content="✕"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- RIBBON TABS -->
+            <Border Grid.Row="1" Background="#F3F3F3" BorderBrush="#D4D4D4" BorderThickness="0,0,0,1" Padding="6,2,6,0">
+                <StackPanel Orientation="Horizontal" Spacing="2">
+                    <Button Name="BtnTabFile"    Content="Tệp"        Background="#107C41" Foreground="White" BorderThickness="0" CornerRadius="3,3,0,0" Padding="14,6" FontWeight="Bold" FontSize="12"/>
+                    <Button Name="BtnTabHome"    Content="Trang đầu"  Background="Transparent" Foreground="#333333" BorderThickness="0" CornerRadius="3,3,0,0" Padding="12,6" FontSize="12"/>
+                    <Button Name="BtnTabInsert"  Content="Chèn"       Background="Transparent" Foreground="#333333" BorderThickness="0" CornerRadius="3,3,0,0" Padding="12,6" FontSize="12"/>
+                    <Button Name="BtnTabLayout"  Content="Bố trí trang" Background="Transparent" Foreground="#333333" BorderThickness="0" CornerRadius="3,3,0,0" Padding="12,6" FontSize="12"/>
+                    <Button Name="BtnTabFormula" Content="Công thức"  Background="Transparent" Foreground="#333333" BorderThickness="0" CornerRadius="3,3,0,0" Padding="12,6" FontSize="12"/>
+                    <Button Name="BtnTabData"    Content="Dữ liệu"    Background="Transparent" Foreground="#333333" BorderThickness="0" CornerRadius="3,3,0,0" Padding="12,6" FontSize="12"/>
+                    <Button Name="BtnTabView"    Content="Xem"        Background="Transparent" Foreground="#333333" BorderThickness="0" CornerRadius="3,3,0,0" Padding="12,6" FontSize="12"/>
+                </StackPanel>
+            </Border>
+
+            <!-- RIBBON TOOLBAR — buttons now wired -->
+            <Border Grid.Row="2" Background="White" BorderBrush="#D4D4D4" BorderThickness="0,0,0,1" Padding="8,4" MinHeight="52">
+              <Grid>
+                <StackPanel Name="RibbonHome" Orientation="Horizontal" Spacing="10">
+
+                    <!-- Nhóm Bảng tạm -->
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="3">
+                            <Button Name="BtnPaste" Classes="ribbon" Content="📋 Dán"/>
+                            <Button Name="BtnCut"   Classes="ribbon" Content="✂ Cắt"/>
+                            <Button Name="BtnCopy"  Classes="ribbon" Content="⧉ Sao chép"/>
+                        </StackPanel>
+                        <TextBlock Classes="groupLabel" Text="Bảng tạm"/>
+                    </StackPanel>
+                    <Border Width="1" Background="#E0E0E0"/>
+
+                    <!-- Nhóm Phông chữ -->
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="3">
+                            <ComboBox Name="CboFontFamily" SelectedIndex="0" Width="152" Height="24" FontSize="11">
+                                <ComboBoxItem>Segoe UI</ComboBoxItem>
+                                <ComboBoxItem>Calibri</ComboBoxItem>
+                                <ComboBoxItem>Arial</ComboBoxItem>
+                                <ComboBoxItem>Times New Roman</ComboBoxItem>
+                                <ComboBoxItem>Cambria</ComboBoxItem>
+                                <ComboBoxItem>Georgia</ComboBoxItem>
+                                <ComboBoxItem>Verdana</ComboBoxItem>
+                                <ComboBoxItem>Tahoma</ComboBoxItem>
+                                <ComboBoxItem>Courier New</ComboBoxItem>
+                            </ComboBox>
+
+                            <!-- Dùng ComboBox như ô phông bên cạnh: bấm là mở danh sách ngay.
+                                 AutoCompleteBox chỉ mở khi gõ nên người dùng bấm vào không thấy gì. -->
+                            <ComboBox Name="CboFontSize" SelectedIndex="4" Width="66" Height="24" FontSize="11">
+                                <ComboBoxItem>8</ComboBoxItem>
+                                <ComboBoxItem>9</ComboBoxItem>
+                                <ComboBoxItem>10</ComboBoxItem>
+                                <ComboBoxItem>11</ComboBoxItem>
+                                <ComboBoxItem>12</ComboBoxItem>
+                                <ComboBoxItem>14</ComboBoxItem>
+                                <ComboBoxItem>16</ComboBoxItem>
+                                <ComboBoxItem>18</ComboBoxItem>
+                                <ComboBoxItem>20</ComboBoxItem>
+                                <ComboBoxItem>22</ComboBoxItem>
+                                <ComboBoxItem>24</ComboBoxItem>
+                                <ComboBoxItem>26</ComboBoxItem>
+                                <ComboBoxItem>28</ComboBoxItem>
+                                <ComboBoxItem>32</ComboBoxItem>
+                                <ComboBoxItem>36</ComboBoxItem>
+                                <ComboBoxItem>48</ComboBoxItem>
+                                <ComboBoxItem>72</ComboBoxItem>
+                            </ComboBox>
+
+                            <Button Name="BtnFontSizeUp"   Classes="icon" Width="26" Height="24" FontSize="10" Content="A▴"/>
+                            <Button Name="BtnFontSizeDown" Classes="icon" Width="26" Height="24" FontSize="10" Content="A▾"/>
+
+                            <Border Width="1" Background="#E0E0E0" Margin="2,0"/>
+
+                            <Button Name="BtnBold" Classes="icon" Width="26" Height="24">
+                                <TextBlock Text="B" FontWeight="Bold" FontSize="13"/>
+                            </Button>
+                            <Button Name="BtnItalic" Classes="icon" Width="26" Height="24">
+                                <TextBlock Text="I" FontStyle="Italic" FontSize="13" FontFamily="Georgia, Times New Roman, serif"/>
+                            </Button>
+                            <Button Name="BtnUnderline" Classes="icon" Width="26" Height="24">
+                                <TextBlock Text="U" FontSize="13" TextDecorations="Underline"/>
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Classes="groupLabel" Text="Phông chữ"/>
+                    </StackPanel>
+                    <Border Width="1" Background="#E0E0E0"/>
+
+                    <!-- Nhóm Căn chỉnh -->
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="3">
+                            <Button Name="BtnAlignLeft" Classes="icon" Width="26" Height="24">
+                                <Path Data="{StaticResource IconAlignLeft}" Stroke="#3A3A3A" StrokeThickness="1.4" StrokeLineCap="Round"/>
+                            </Button>
+                            <Button Name="BtnAlignCenter" Classes="icon" Width="26" Height="24">
+                                <Path Data="{StaticResource IconAlignCenter}" Stroke="#3A3A3A" StrokeThickness="1.4" StrokeLineCap="Round"/>
+                            </Button>
+                            <Button Name="BtnAlignRight" Classes="icon" Width="26" Height="24">
+                                <Path Data="{StaticResource IconAlignRight}" Stroke="#3A3A3A" StrokeThickness="1.4" StrokeLineCap="Round"/>
+                            </Button>
+                            <Button Name="BtnMergeCenter" Classes="ribbon" Content="⊞ Gộp"/>
+                        </StackPanel>
+                        <TextBlock Classes="groupLabel" Text="Căn chỉnh"/>
+                    </StackPanel>
+                    <Border Name="SeparatorNumber" Width="1" Background="#E0E0E0"/>
+
+                    <!-- Nhóm Số — chỉ có nghĩa với bảng tính -->
+                    <StackPanel Name="GroupNumber">
+                        <StackPanel Orientation="Horizontal" Spacing="3">
+                            <ComboBox Name="CboNumberFormat" SelectedIndex="0" Width="118" Height="24" FontSize="11">
+                                <ComboBoxItem>Chung</ComboBoxItem>
+                                <ComboBoxItem>Số nguyên</ComboBoxItem>
+                                <ComboBoxItem>Thập phân</ComboBoxItem>
+                                <ComboBoxItem>Nghìn</ComboBoxItem>
+                                <ComboBoxItem>Tiền tệ ₫</ComboBoxItem>
+                                <ComboBoxItem>Phần trăm %</ComboBoxItem>
+                                <ComboBoxItem>Ngày tháng</ComboBoxItem>
+                                <ComboBoxItem>Khoa học</ComboBoxItem>
+                            </ComboBox>
+                            <Button Name="BtnFormatCurrency" Classes="icon" Width="26" Height="24" FontSize="12" Content="₫"/>
+                            <Button Name="BtnFormatPercent"  Classes="icon" Width="26" Height="24" FontSize="12" Content="%"/>
+                        </StackPanel>
+                        <TextBlock Classes="groupLabel" Text="Số"/>
+                    </StackPanel>
+                    <Border Name="SeparatorEditing" Width="1" Background="#E0E0E0"/>
+
+                    <!-- Nhóm Chỉnh sửa — chỉ có nghĩa với bảng tính -->
+                    <StackPanel Name="GroupEditing">
+                        <StackPanel Orientation="Horizontal" Spacing="3">
+                            <Button Name="BtnAutoSum" Classes="ribbon" Content="Σ AutoSum" Background="#F1F9F3" Foreground="#107C41" FontWeight="SemiBold" BorderBrush="#107C41"/>
+                            <Button Name="BtnSortAsc"  Classes="ribbon" Content="↑ A→Z"/>
+                            <Button Name="BtnSortDesc" Classes="ribbon" Content="↓ Z→A"/>
+                        </StackPanel>
+                        <TextBlock Classes="groupLabel" Text="Chỉnh sửa"/>
+                    </StackPanel>
+                    <Border Width="1" Background="#E0E0E0"/>
+
+                    <!-- PDF Navigation (visible only for PDF tabs) -->
+                    <StackPanel Name="PdfNavToolGroup" IsVisible="False">
+                        <StackPanel Orientation="Horizontal" Spacing="3" Margin="0,0,0,2">
+                            <Button Name="BtnPdfPrevPage" Content="◀ Trang trước" Background="#FEF9EC" BorderBrush="#E8C34A" BorderThickness="1" CornerRadius="2" Padding="8,2" FontSize="11" Foreground="#7A6000"/>
+                            <Border VerticalAlignment="Center" Padding="8,0">
+                                <TextBlock Name="TxtPdfPageIndicator" Text="Trang 1 / 1" FontSize="11" FontWeight="Bold" Foreground="#444444"/>
+                            </Border>
+                            <Button Name="BtnPdfNextPage" Content="Trang tiếp ▶" Background="#FEF9EC" BorderBrush="#E8C34A" BorderThickness="1" CornerRadius="2" Padding="8,2" FontSize="11" Foreground="#7A6000"/>
+                        </StackPanel>
+                        <TextBlock Text="Điều hướng PDF" FontSize="9" Foreground="#888888" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- ── Thẻ CHÈN ─────────────────────────────────────── -->
+                <StackPanel Name="RibbonInsert" Orientation="Horizontal" Spacing="10" IsVisible="False" VerticalAlignment="Center">
+                    <Button Name="BtnInsertRow"    Content="➕ Chèn dòng"    Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnInsertColumn" Content="➕ Chèn cột"     Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnDeleteRow"    Content="➖ Xoá dòng"     Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnDeleteColumn" Content="➖ Xoá cột"      Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Border Width="1" Background="#E0E0E0"/>
+                    <Button Name="BtnInsertToday"  Content="📅 Chèn ngày hôm nay" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnInsertSheet"  Content="📄 Trang tính mới"    Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Border Width="1" Background="#E0E0E0"/>
+                    <Button Name="BtnExpand100RowsTop" Content="➕ 100 dòng" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnExpandColsTop"    Content="➕ 6 cột"    Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                </StackPanel>
+
+                <!-- ── Thẻ BỐ TRÍ TRANG ─────────────────────────────── -->
+                <StackPanel Name="RibbonLayout" Orientation="Horizontal" Spacing="10" IsVisible="False" VerticalAlignment="Center">
+                    <TextBlock Text="Khổ giấy khi xuất PDF:" FontSize="11" Foreground="#444444" VerticalAlignment="Center"/>
+                    <ComboBox Name="CboExportPageSize" SelectedIndex="0" Width="100" Height="26" FontSize="11">
+                        <ComboBoxItem>A4</ComboBoxItem>
+                        <ComboBoxItem>A3</ComboBoxItem>
+                        <ComboBoxItem>A5</ComboBoxItem>
+                        <ComboBoxItem>Letter</ComboBoxItem>
+                        <ComboBoxItem>Legal</ComboBoxItem>
+                    </ComboBox>
+                    <CheckBox Name="ChkExportLandscape" Content="In ngang giấy" IsChecked="True" FontSize="11" VerticalAlignment="Center"/>
+                    <Border Width="1" Background="#E0E0E0"/>
+                    <Button Name="BtnExportSheetToPdf" Content="📕 Xuất trang tính ra PDF" Background="#F1F9F3" Foreground="#107C41" FontWeight="SemiBold" BorderBrush="#107C41" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnExportSheetToCsv" Content="📄 Xuất ra CSV" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                </StackPanel>
+
+                <!-- ── Thẻ CÔNG THỨC ────────────────────────────────── -->
+                <StackPanel Name="RibbonFormula" Orientation="Horizontal" Spacing="10" IsVisible="False" VerticalAlignment="Center">
+                    <Button Name="BtnFormulaAutoSum" Content="∑ AutoSum"     Background="#F1F9F3" Foreground="#107C41" FontWeight="SemiBold" BorderBrush="#107C41" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFormulaAverage" Content="x̄ Trung bình"  Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFormulaCount"   Content="# Đếm"         Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFormulaMax"     Content="▲ Lớn nhất"    Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFormulaMin"     Content="▼ Nhỏ nhất"    Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Border Width="1" Background="#E0E0E0"/>
+                    <Button Name="BtnFormulaList"    Content="📚 Danh mục hàm" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnRecalculate"    Content="🔄 Tính lại toàn bộ" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                </StackPanel>
+
+                <!-- ── Thẻ DỮ LIỆU ──────────────────────────────────── -->
+                <StackPanel Name="RibbonData" Orientation="Horizontal" Spacing="10" IsVisible="False" VerticalAlignment="Center">
+                    <Button Name="BtnDataSortAsc"    Content="↑ Sắp xếp A→Z" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnDataSortDesc"   Content="↓ Sắp xếp Z→A" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Border Width="1" Background="#E0E0E0"/>
+                    <Button Name="BtnRemoveDuplicates" Content="🧹 Xoá dòng trùng" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnTrimSpaces"       Content="✂ Bỏ khoảng trắng thừa" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnClearContents"    Content="🗑 Xoá nội dung vùng chọn" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                </StackPanel>
+
+                <!-- ── Thẻ XEM ──────────────────────────────────────── -->
+                <StackPanel Name="RibbonView" Orientation="Horizontal" Spacing="10" IsVisible="False" VerticalAlignment="Center">
+                    <TextBlock Text="Thu phóng:" FontSize="11" Foreground="#444444" VerticalAlignment="Center"/>
+                    <Button Name="BtnZoomOut"   Content="➖" Width="28" Height="26" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" FontSize="11"/>
+                    <TextBlock Name="TxtZoomLevel" Text="100%" FontSize="11" FontWeight="SemiBold" Foreground="#107C41" VerticalAlignment="Center" Width="46" TextAlignment="Center"/>
+                    <Button Name="BtnZoomIn"    Content="➕" Width="28" Height="26" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" FontSize="11"/>
+                    <Button Name="BtnZoomReset" Content="100%" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="8,4" FontSize="11"/>
+                    <Border Width="1" Background="#E0E0E0"/>
+                    <Button Name="BtnGoToCell"  Content="🎯 Nhảy tới ô…" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFitColumns" Content="↔ Vừa cột theo nội dung" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                </StackPanel>
+
+                <!-- ── Thẻ TỆP ──────────────────────────────────────── -->
+                <StackPanel Name="RibbonFile" Orientation="Horizontal" Spacing="10" IsVisible="False" VerticalAlignment="Center">
+                    <Button Name="BtnFileNewExcel" Content="📗 Sổ tính mới"   Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFileNewWord"  Content="📘 Tài liệu mới"  Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFileOpen"     Content="📂 Mở tệp…"       Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFileSave"     Content="💾 Lưu"           Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFileSaveAs"   Content="💾 Lưu thành…"    Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Border Width="1" Background="#E0E0E0"/>
+                    <Button Name="BtnFileTools"    Content="🛠 Bộ công cụ tệp" Background="#FBF3FA" Foreground="#7D3C98" FontWeight="SemiBold" BorderBrush="#8E44AD" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                    <Button Name="BtnFileCloseTab" Content="✕ Đóng thẻ"      Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Padding="10,4" FontSize="11"/>
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <!-- WORKSPACE TABS -->
+            <Border Grid.Row="3" Background="#E1E1E1" Padding="8,4,8,0">
+                <StackPanel Name="WorkspaceTabsHeader" Orientation="Horizontal" Spacing="3"/>
+            </Border>
+
+            <!-- THANH CÔNG THỨC — nằm ngay trên lưới như Excel, chỉ hiện với bảng tính -->
+            <Border Name="FormulaBarContainer" Grid.Row="4" Background="#F9F9F9" BorderBrush="#D4D4D4" BorderThickness="0,0,0,1" Padding="4,3" IsVisible="False">
+                <Grid ColumnDefinitions="120,4,26,26,32,*">
+                    <!-- Ô địa chỉ (Name Box) -->
+                    <TextBox Name="TxtSelectionRange" Grid.Column="0" Text="{Binding CurrentCellAddress}"
+                             FontWeight="SemiBold" FontSize="11" Height="24"
+                             HorizontalContentAlignment="Center" VerticalAlignment="Center"
+                             Background="White" BorderBrush="#D4D4D4"/>
+
+                    <Border Grid.Column="1" Width="1" Background="#D4D4D4" Margin="2,2"/>
+
+                    <Button Name="BtnCancelFormula" Grid.Column="2" Content="✕" Background="Transparent" BorderThickness="0"
+                            Foreground="#C00000" FontSize="12" Width="24" Height="24"
+                            HorizontalContentAlignment="Center"/>
+                    <Button Name="BtnApplyFormulaCheck" Grid.Column="3" Content="✓" Background="Transparent" BorderThickness="0"
+                            Foreground="#107C41" FontWeight="Bold" FontSize="13" Width="24" Height="24"
+                            HorizontalContentAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Text="fx" FontStyle="Italic" FontWeight="Bold" FontSize="14"
+                               Foreground="#107C41" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <TextBox Name="TxtFormulaInput" Grid.Column="5" Text="{Binding CurrentFormula, Mode=TwoWay}"
+                             VerticalAlignment="Center" Height="24" FontSize="12" Background="White" BorderBrush="#D4D4D4"
+                             Watermark="Nhập giá trị hoặc công thức — gõ = để hiện gợi ý hàm"/>
+                </Grid>
+            </Border>
+
+            <!-- VÙNG NỘI DUNG -->
+            <Grid Grid.Row="5">
+
+                <!-- A. LƯỚI BẢNG TÍNH -->
+                <ScrollViewer Name="ExcelEditorContainer" Background="White"
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ctrl:ExcelCanvasGrid Name="MainExcelCanvasGrid" TotalRows="100" TotalCols="26"/>
+                </ScrollViewer>
+
+                <!-- B. TRÌNH SOẠN THẢO WORD -->
+                <ScrollViewer Name="WordEditorContainer" Background="#E5E5E5" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsVisible="False">
+                    <Border Width="680" MinHeight="880" Margin="25" Background="White" CornerRadius="2" HorizontalAlignment="Center">
+                        <Border.BoxShadow>0 4 15 0 #33000000</Border.BoxShadow>
+                        <ctrl:WordCanvasEditor Name="WordDocumentEditor"/>
+                    </Border>
+                </ScrollViewer>
+
+                <!-- C. TRÌNH XEM PDF -->
+                <Grid Name="PdfViewerContainer" RowDefinitions="*,Auto" IsVisible="False" Background="#E5E5E5">
+                    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center">
+                        <ctrl:PdfPageViewer Name="PdfPageViewerControl" HorizontalAlignment="Center"/>
+                    </ScrollViewer>
+                    <Border Grid.Row="1" Background="#F0F0F0" BorderBrush="#D4D4D4" BorderThickness="0,1,0,0" Padding="12,6">
+                        <Grid ColumnDefinitions="*,Auto,*">
+                            <TextBlock Grid.Column="0" Name="TxtPdfFileName" Text="document.pdf" FontSize="11" Foreground="#555555" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                <Button Name="BtnPdfPrevPage2" Content="◀ Trang trước" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="3" Padding="10,4" FontSize="12"/>
+                                <TextBlock Name="TxtPdfPageBar" Text="Trang 1 / 1" FontWeight="Bold" FontSize="13" VerticalAlignment="Center" Foreground="#333333"/>
+                                <Button Name="BtnPdfNextPage2" Content="Trang tiếp ▶" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="3" Padding="10,4" FontSize="12"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" VerticalAlignment="Center">
+                                <Button Name="BtnExportPdfToWord" Content="↗ Xuất ra Word" Background="#F4F8FC" BorderBrush="#185ABD" BorderThickness="1" Foreground="#185ABD" FontSize="11" Padding="8,3" CornerRadius="3"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- D. BỘ CÔNG CỤ XỬ LÝ TỆP -->
+                <Border Name="PdfToolsContainer" IsVisible="False"/>
+            </Grid>
+
+            <!-- DẢI TRANG TÍNH — sát đáy lưới, ngay trên thanh trạng thái như Excel -->
+            <Border Name="SheetTabBar" Grid.Row="6" Background="#F0F0F0" BorderBrush="#D4D4D4" BorderThickness="0,1,0,0" Padding="8,2" IsVisible="False">
+                <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                    <Button Name="BtnPrevSheet" Content="◀" Background="Transparent" BorderThickness="0" Padding="6,2" FontSize="9"/>
+                    <Button Name="BtnNextSheet" Content="▶" Background="Transparent" BorderThickness="0" Padding="6,2" FontSize="9"/>
+                    <StackPanel Name="SheetTabsContainer" Orientation="Horizontal" Spacing="2" Margin="4,0,0,0"/>
+                    <Button Name="BtnAddSheet" Content="+" Background="White" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="2" Width="20" Height="20" Padding="0" Margin="4,0,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- THANH TRẠNG THÁI — thống kê vùng chọn và thu phóng nằm bên phải như Excel -->
+            <Border Grid.Row="7" Background="#F0F0F0" BorderBrush="#D4D4D4" BorderThickness="0,1,0,0" Padding="12,0">
+                <Grid ColumnDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Center">
+                    <TextBlock Grid.Column="0" Text="SẴN SÀNG" FontSize="10" FontWeight="Bold" Foreground="#107C41" VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="1" Name="TxtStatusBar" Text="Wocel Office 1.0" Margin="14,0"
+                               FontSize="10" Foreground="#777777" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="14" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <TextBlock Name="TxtAverageStat" Text="AVERAGE: 0" FontSize="10" Foreground="#444444"/>
+                        <TextBlock Name="TxtCountStat"   Text="COUNT: 0"   FontSize="10" Foreground="#444444"/>
+                        <TextBlock Name="TxtSumStat"     Text="SUM: 0"     FontSize="10" FontWeight="Bold" Foreground="#107C41"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                        <TextBlock Text="−" FontSize="12" Foreground="#555555" VerticalAlignment="Center"/>
+                        <Slider Name="SliderZoom" Width="90" Minimum="50" Maximum="200" Value="100"
+                                TickFrequency="10" IsSnapToTickEnabled="True" VerticalAlignment="Center"/>
+                        <TextBlock Text="+" FontSize="12" Foreground="#555555" VerticalAlignment="Center"/>
+                        <TextBlock Name="TxtZoomStatus" Text="100%" FontSize="10" FontWeight="SemiBold"
+                                   Foreground="#107C41" Width="36" TextAlignment="Right" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

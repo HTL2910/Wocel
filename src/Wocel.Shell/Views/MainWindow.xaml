@@ -1,0 +1,387 @@
+<Window x:Class="Wocel.Shell.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Wocel - Office Suite (Word &amp; Excel)" 
+        Height="850" Width="1300"
+        MinHeight="600" MinWidth="900"
+        WindowStartupLocation="CenterScreen"
+        Background="#F3F3F3"
+        FontFamily="Segoe UI Variable Display, Segoe UI, sans-serif">
+
+    <Window.Resources>
+        <ResourceDictionary Source="/Wocel.Shell;component/Styles/ModernTheme.xaml"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Title Bar & Quick Access -->
+            <RowDefinition Height="Auto"/> <!-- Modern Ribbon Tabs -->
+            <RowDefinition Height="Auto"/> <!-- Ribbon Commands Toolstrip -->
+            <RowDefinition Height="Auto"/> <!-- Workspace Document Tabs Bar -->
+            <RowDefinition Height="*"/>    <!-- Main Canvas / Split-View Area -->
+            <RowDefinition Height="28"/>   <!-- Bottom Status Bar -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. MODERN TITLEBAR -->
+        <Border Grid.Row="0" Background="#FAFAFA" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="12,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- App Logo & Name -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border CornerRadius="4" Width="24" Height="24" Background="#0F6CBD" Margin="0,0,8,0">
+                        <TextBlock Text="W" Foreground="White" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Wocel" FontWeight="Bold" FontSize="15" Foreground="#1A1A1A" VerticalAlignment="Center"/>
+                    <TextBlock Text=" Suite" FontWeight="Normal" FontSize="15" Foreground="#616161" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Quick Action Buttons -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="24,0,0,0" VerticalAlignment="Center">
+                    <Button Content="💾 Lưu" Style="{StaticResource FluentButtonStyle}" Margin="0,0,4,0"/>
+                    <Button Content="↩ Hoàn tác" Style="{StaticResource FluentButtonStyle}" Margin="0,0,4,0"/>
+                    <Button Content="↪ Làm lại" Style="{StaticResource FluentButtonStyle}" Margin="0,0,12,0"/>
+                    <Button Content="+ New Word" Style="{StaticResource FluentButtonStyle}" Foreground="#185ABD" Margin="0,0,4,0"/>
+                    <Button Content="+ New Excel" Style="{StaticResource FluentButtonStyle}" Foreground="#107C41" Margin="0,0,4,0"/>
+                </StackPanel>
+
+                <!-- Search / Tell Me Box -->
+                <Border Grid.Column="2" HorizontalAlignment="Center" Width="360" Background="#FFFFFF" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="6" Padding="8,4">
+                    <Grid>
+                        <TextBlock Text="🔍 Tìm kiếm tính năng, tài liệu, công thức..." Foreground="#8A8A8A" FontSize="12" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Right Quick Tools -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="⚡ Split Screen (50/50)" Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0"/>
+                    <Button Content="🔗 Sync Range to Doc" Style="{StaticResource FluentButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 2. MODERN RIBBON TABS -->
+        <Border Grid.Row="1" Background="#FAFAFA" Padding="8,2,8,0">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton Content="Trang chủ" Style="{StaticResource RibbonTabButtonStyle}" IsChecked="True"/>
+                <RadioButton Content="Chèn (Insert)" Style="{StaticResource RibbonTabButtonStyle}"/>
+                <RadioButton Content="Bố cục trang (Layout)" Style="{StaticResource RibbonTabButtonStyle}"/>
+                <RadioButton Content="Công thức (Formulas)" Style="{StaticResource RibbonTabButtonStyle}"/>
+                <RadioButton Content="Dữ liệu (Data)" Style="{StaticResource RibbonTabButtonStyle}"/>
+                <RadioButton Content="Xem (View)" Style="{StaticResource RibbonTabButtonStyle}"/>
+                <RadioButton Content="Liên kết Word-Excel (Interop)" Style="{StaticResource RibbonTabButtonStyle}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 3. RIBBON COMMANDS TOOLSTRIP -->
+        <Border Grid.Row="2" Background="#FFFFFF" BorderBrush="#E0E0E0" BorderThickness="0,1,0,1" Padding="12,8">
+            <WrapPanel Orientation="Horizontal">
+                <!-- Group: Clipboard -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,0">
+                    <Button Content="📋 Dán" Style="{StaticResource FluentButtonStyle}" Margin="0,0,4,0"/>
+                    <Button Content="✂ Cắt" Style="{StaticResource FluentButtonStyle}" Margin="0,0,4,0"/>
+                    <Button Content="📄 Sao chép" Style="{StaticResource FluentButtonStyle}"/>
+                </StackPanel>
+                <Separator Margin="0,0,16,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                <!-- Group: Typography / Font -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,16,0">
+                    <ComboBox Width="130" SelectedIndex="0" Margin="0,0,4,0" VerticalAlignment="Center">
+                        <ComboBoxItem Content="Segoe UI"/>
+                        <ComboBoxItem Content="Calibri"/>
+                        <ComboBoxItem Content="Arial"/>
+                        <ComboBoxItem Content="Times New Roman"/>
+                    </ComboBox>
+                    <ComboBox Width="55" SelectedIndex="2" Margin="0,0,8,0" VerticalAlignment="Center">
+                        <ComboBoxItem Content="10"/>
+                        <ComboBoxItem Content="11"/>
+                        <ComboBoxItem Content="12"/>
+                        <ComboBoxItem Content="14"/>
+                        <ComboBoxItem Content="18"/>
+                    </ComboBox>
+                    <Button Content="B" FontWeight="Bold" Width="30" Style="{StaticResource FluentButtonStyle}" Margin="0,0,2,0"/>
+                    <Button Content="I" FontStyle="Italic" Width="30" Style="{StaticResource FluentButtonStyle}" Margin="0,0,2,0"/>
+                    <Button Content="U" Width="30" Style="{StaticResource FluentButtonStyle}" Margin="0,0,8,0"/>
+                    <Button Content="🎨 Màu" Style="{StaticResource FluentButtonStyle}"/>
+                </StackPanel>
+                <Separator Margin="0,0,16,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                <!-- Group: Quick Functions (Excel & Word) -->
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="∑ Tự động tính (AutoSum)" Style="{StaticResource FluentButtonStyle}" Margin="0,0,4,0"/>
+                    <Button Content="⊞ Chèn Bảng" Style="{StaticResource FluentButtonStyle}" Margin="0,0,4,0"/>
+                    <Button Content="📑 Xuất PDF" Style="{StaticResource FluentButtonStyle}"/>
+                </StackPanel>
+            </WrapPanel>
+        </Border>
+
+        <!-- 4. WORKSPACE DOCUMENT TABS BAR -->
+        <Border Grid.Row="3" Background="#E8E8E8" Padding="10,6,10,0">
+            <StackPanel Orientation="Horizontal">
+                <!-- Word Tab (Active) -->
+                <Border Background="#FFFFFF" CornerRadius="6,6,0,0" Padding="12,6" Margin="0,0,4,0" BorderBrush="#E0E0E0" BorderThickness="1,1,1,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Border CornerRadius="3" Width="16" Height="16" Background="#185ABD" Margin="0,0,6,0">
+                            <TextBlock Text="W" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Báo cáo tài chính Q1.docx" FontWeight="SemiBold" FontSize="12" Foreground="#1A1A1A" VerticalAlignment="Center"/>
+                        <Button Content="✕" Background="Transparent" BorderThickness="0" Margin="8,0,0,0" FontSize="10" Cursor="Hand"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Excel Tab -->
+                <Border Background="#E0E0E0" CornerRadius="6,6,0,0" Padding="12,6" Margin="0,0,4,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Border CornerRadius="3" Width="16" Height="16" Background="#107C41" Margin="0,0,6,0">
+                            <TextBlock Text="X" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="BangTinh_DoanhThu.xlsx" FontSize="12" Foreground="#616161" VerticalAlignment="Center"/>
+                        <Button Content="✕" Background="Transparent" BorderThickness="0" Margin="8,0,0,0" FontSize="10" Cursor="Hand"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- New Tab Button -->
+                <Button Content="+" Style="{StaticResource FluentButtonStyle}" Width="28" Height="28" Padding="0" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 5. MAIN WORKSPACE CANVAS (SPLIT-VIEW CAPABLE) -->
+        <Grid Grid.Row="4" Background="#EFEFEF">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>         <!-- Left Pane (Word Document) -->
+                <ColumnDefinition Width="Auto"/>      <!-- Splitter -->
+                <ColumnDefinition Width="*"/>         <!-- Right Pane (Excel Spreadsheet) -->
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT PANE: WORD A4 PAPER VIEW -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="#E5E5E5">
+                <Border Width="650" MinHeight="850" Margin="20" Background="#FFFFFF" CornerRadius="2">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.15" Color="#000000"/>
+                    </Border.Effect>
+                    <StackPanel Margin="50">
+                        <TextBlock Text="BÁO CÁO KẾ HOẠCH TÀI CHÍNH QUÝ 1" FontSize="22" FontWeight="Bold" Foreground="#185ABD" Margin="0,0,0,16"/>
+                        <TextBlock Text="1. Tổng quan tình hình hoạt động" FontSize="15" FontWeight="SemiBold" Foreground="#1A1A1A" Margin="0,0,0,8"/>
+                        <TextBlock Text="Trong quý 1 năm nay, doanh thu toàn công ty ghi nhận mức tăng trưởng vượt trội. Bảng số liệu chi tiết bên dưới được liên kết trực tiếp theo thời gian thực từ bảng tính Excel." 
+                                   FontSize="13" TextWrapping="Wrap" LineHeight="20" Foreground="#333333" Margin="0,0,0,16"/>
+
+                        <!-- Embedded Live Sheet Table -->
+                        <Border BorderBrush="#185ABD" BorderThickness="1.5" CornerRadius="4" Margin="0,0,0,16" Background="#F9FBFF">
+                            <StackPanel>
+                                <Border Background="#185ABD" Padding="8,4">
+                                    <TextBlock Text="⚡ BẢNG SỐ LIỆU ĐỒNG BỘ TỪ EXCEL (A1:C3)" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                                </Border>
+                                <Grid Margin="8">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Row 0: Headers -->
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Khoản mục" FontWeight="Bold" FontSize="12"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Kế hoạch (VNĐ)" FontWeight="Bold" FontSize="12"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Thực tế (VNĐ)" FontWeight="Bold" FontSize="12"/>
+
+                                    <!-- Row 1 -->
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Doanh thu bán lẻ" FontSize="12" Margin="0,6,0,0"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="1,200,000,000" FontSize="12" Margin="0,6,0,0"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="1,450,000,000" FontSize="12" Margin="0,6,0,0" Foreground="#107C41" FontWeight="SemiBold"/>
+
+                                    <!-- Row 2 -->
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Chi phí Vận hành" FontSize="12" Margin="0,6,0,0"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="450,000,000" FontSize="12" Margin="0,6,0,0"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="410,000,000" FontSize="12" Margin="0,6,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="2. Đánh giá và kiến nghị" FontSize="15" FontWeight="SemiBold" Foreground="#1A1A1A" Margin="0,8,0,8"/>
+                        <TextBlock Text="Tiếp tục tối ưu chi phí vận hành và mở rộng các kênh bán lẻ trực tuyến để duy trì đà tăng trưởng cho các quý tiếp theo." 
+                                   FontSize="13" TextWrapping="Wrap" LineHeight="20" Foreground="#333333"/>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+
+            <!-- SPLITTER -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" Background="#D0D0D0" ShowsPreview="True"/>
+
+            <!-- RIGHT PANE: EXCEL SPREADSHEET VIEW -->
+            <Grid Grid.Column="2" Background="#FFFFFF">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Formula Bar -->
+                    <RowDefinition Height="*"/>    <!-- Spreadsheet Grid -->
+                    <RowDefinition Height="26"/>   <!-- Sheet Tabs Switcher -->
+                </Grid.RowDefinitions>
+
+                <!-- Formula Bar (Name Box + fx + Formula Input) -->
+                <Border Grid.Row="0" Background="#FAFAFA" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="8,4">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="C2" FontWeight="SemiBold" HorizontalContentAlignment="Center" VerticalAlignment="Center" BorderBrush="#D0D0D0" Padding="4,2"/>
+                        <TextBlock Grid.Column="1" Text="fx" FontStyle="Italic" FontWeight="Bold" FontSize="14" Foreground="#107C41" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="2" Text="=SUM(C2:C3)" VerticalAlignment="Center" BorderBrush="#D0D0D0" Padding="6,2"/>
+                    </Grid>
+                </Border>
+
+                <!-- Spreadsheet Grid Table Canvas -->
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid Background="#FFFFFF">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24"/> <!-- Header A, B, C -->
+                            <RowDefinition Height="24"/> <!-- Row 1 -->
+                            <RowDefinition Height="24"/> <!-- Row 2 -->
+                            <RowDefinition Height="24"/> <!-- Row 3 -->
+                            <RowDefinition Height="24"/> <!-- Row 4 -->
+                            <RowDefinition Height="24"/> <!-- Row 5 -->
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>  <!-- Row Numbers -->
+                            <ColumnDefinition Width="160"/> <!-- Col A -->
+                            <ColumnDefinition Width="140"/> <!-- Col B -->
+                            <ColumnDefinition Width="140"/> <!-- Col C -->
+                            <ColumnDefinition Width="120"/> <!-- Col D -->
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Headers -->
+                        <Border Grid.Row="0" Grid.Column="0" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1"/>
+                        <Border Grid.Row="0" Grid.Column="1" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1">
+                            <TextBlock Text="A" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="11" Foreground="#616161"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="2" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1">
+                            <TextBlock Text="B" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="11" Foreground="#616161"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="3" Background="#D7EBDD" BorderBrush="#107C41" BorderThickness="0,0,1,1">
+                            <TextBlock Text="C" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="11" Foreground="#107C41"/>
+                        </Border>
+                        <Border Grid.Row="0" Grid.Column="4" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1">
+                            <TextBlock Text="D" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="11" Foreground="#616161"/>
+                        </Border>
+
+                        <!-- Row 1 -->
+                        <Border Grid.Row="1" Grid.Column="0" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1">
+                            <TextBlock Text="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" Foreground="#616161"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="Khoản mục" FontWeight="Bold" VerticalAlignment="Center" FontSize="12"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="Kế hoạch (VNĐ)" FontWeight="Bold" VerticalAlignment="Center" FontSize="12"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="Thực tế (VNĐ)" FontWeight="Bold" VerticalAlignment="Center" FontSize="12"/>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="Tỷ lệ %" FontWeight="Bold" VerticalAlignment="Center" FontSize="12"/>
+                        </Border>
+
+                        <!-- Row 2 -->
+                        <Border Grid.Row="2" Grid.Column="0" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1">
+                            <TextBlock Text="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" Foreground="#616161"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="Doanh thu bán lẻ" VerticalAlignment="Center" FontSize="12"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="1,200,000,000" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="3" BorderBrush="#107C41" BorderThickness="2" Background="#EBF9F1" Padding="6,2">
+                            <TextBlock Text="1,450,000,000" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="#107C41" HorizontalAlignment="Right"/>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="120.8%" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right"/>
+                        </Border>
+
+                        <!-- Row 3 -->
+                        <Border Grid.Row="3" Grid.Column="0" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1">
+                            <TextBlock Text="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" Foreground="#616161"/>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="Chi phí Vận hành" VerticalAlignment="Center" FontSize="12"/>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="450,000,000" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right"/>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="410,000,000" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right"/>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="91.1%" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right"/>
+                        </Border>
+
+                        <!-- Row 4: Total -->
+                        <Border Grid.Row="4" Grid.Column="0" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="0,0,1,1">
+                            <TextBlock Text="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" Foreground="#616161"/>
+                        </Border>
+                        <Border Grid.Row="4" Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="Lợi nhuận gộp" FontWeight="Bold" VerticalAlignment="Center" FontSize="12"/>
+                        </Border>
+                        <Border Grid.Row="4" Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="750,000,000" FontWeight="Bold" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right"/>
+                        </Border>
+                        <Border Grid.Row="4" Grid.Column="3" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="1,040,000,000" FontWeight="Bold" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right" Foreground="#107C41"/>
+                        </Border>
+                        <Border Grid.Row="4" Grid.Column="4" BorderBrush="#E0E0E0" BorderThickness="0,0,1,1" Padding="6,2">
+                            <TextBlock Text="138.6%" FontWeight="Bold" VerticalAlignment="Center" FontSize="12" HorizontalAlignment="Right"/>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+
+                <!-- Bottom Sheet Tabs Switcher -->
+                <Border Grid.Row="2" Background="#F3F3F3" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="8,2">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="#FFFFFF" BorderBrush="#107C41" BorderThickness="0,0,0,2" Padding="12,2" Margin="0,0,4,0">
+                            <TextBlock Text="Sheet1 (DoanhThu)" FontSize="11" FontWeight="SemiBold" Foreground="#107C41"/>
+                        </Border>
+                        <Border Background="Transparent" Padding="12,2" Margin="0,0,4,0">
+                            <TextBlock Text="Sheet2 (ChiPhi)" FontSize="11" Foreground="#616161"/>
+                        </Border>
+                        <Button Content="+" Style="{StaticResource FluentButtonStyle}" Padding="6,0" Height="20"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- 6. BOTTOM STATUS BAR -->
+        <Border Grid.Row="5" Background="#FAFAFA" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="12,0">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Trang 1 / 1" FontSize="11" Foreground="#616161" Margin="0,0,12,0"/>
+                    <TextBlock Text="142 từ" FontSize="11" Foreground="#616161" Margin="0,0,12,0"/>
+                    <TextBlock Text="Tiếng Việt (Việt Nam)" FontSize="11" Foreground="#616161"/>
+                </StackPanel>
+
+                <!-- Right Excel Quick Calculation Stats & Zoom Slider -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Average: 930,000,000  |  Count: 2  |  Sum: 1,860,000,000" FontSize="11" Foreground="#107C41" FontWeight="SemiBold" Margin="0,0,20,0"/>
+                    <TextBlock Text="100%" FontSize="11" Foreground="#616161" Margin="0,0,8,0"/>
+                    <Slider Width="100" Minimum="50" Maximum="200" Value="100" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

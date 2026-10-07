@@ -1,0 +1,102 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Wocel.Shell.App"
+             RequestedThemeVariant="Light">
+    <Application.Resources>
+        <!-- Biểu tượng vẽ bằng vector nên không phụ thuộc phông chữ của máy.
+             Ký tự Unicode như ⫷ ⫸ không có trong nhiều phông và bị thay bằng ký tự lạ. -->
+        <StreamGeometry x:Key="IconAlignLeft">M1,2 H15 M1,5.5 H10 M1,9 H15 M1,12.5 H9</StreamGeometry>
+        <StreamGeometry x:Key="IconAlignCenter">M1,2 H15 M4,5.5 H12 M1,9 H15 M3.5,12.5 H12.5</StreamGeometry>
+        <StreamGeometry x:Key="IconAlignRight">M1,2 H15 M6,5.5 H15 M1,9 H15 M7,12.5 H15</StreamGeometry>
+        <StreamGeometry x:Key="IconAlignJustify">M1,2 H15 M1,5.5 H15 M1,9 H15 M1,12.5 H15</StreamGeometry>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- Nút biểu tượng vuông: theme Fluent mặc định thêm padding rất rộng,
+             làm chữ trong nút 24px bị cắt mất hai bên. -->
+        <Style Selector="Button.icon">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="2"/>
+        </Style>
+        <Style Selector="Button.icon:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#EAF6EF"/>
+            <Setter Property="BorderBrush" Value="#107C41"/>
+        </Style>
+
+        <!-- Nút có chữ trên ribbon -->
+        <Style Selector="Button.ribbon">
+            <Setter Property="Padding" Value="8,3"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
+        <Style Selector="Button.ribbon:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#EAF6EF"/>
+            <Setter Property="BorderBrush" Value="#107C41"/>
+        </Style>
+
+        <!-- Nút điều khiển cửa sổ: vuông, phẳng, sáng lên khi rê chuột như Windows -->
+        <Style Selector="Button.windowButton">
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.windowButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1A8F52"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.windowButton.close:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#C42B1C"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Nhãn tên nhóm dưới mỗi cụm lệnh, giống Word và Excel -->
+        <Style Selector="TextBlock.groupLabel">
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="Foreground" Value="#888888"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,2,0,0"/>
+        </Style>
+
+        <!-- Tooltip kiểu Office: thẻ trắng có viền, đọc dễ hơn hộp mặc định -->
+        <Style Selector="ToolTip">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#C8CDD4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="MaxWidth" Value="320"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#1A1A1A"/>
+        </Style>
+
+        <!-- Dòng đầu là tên lệnh, dòng sau là mô tả — cho xuống dòng và giãn dòng cho dễ đọc -->
+        <Style Selector="ToolTip TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="LineHeight" Value="17"/>
+            <Setter Property="MaxWidth" Value="290"/>
+        </Style>
+    </Application.Styles>
+</Application>
