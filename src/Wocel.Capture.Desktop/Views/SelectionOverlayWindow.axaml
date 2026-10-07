@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Wocel.Capture.Desktop.ViewModels"
+        xmlns:controls="using:Wocel.Capture.Desktop.Controls"
+        x:Class="Wocel.Capture.Desktop.Views.SelectionOverlayWindow"
+        x:DataType="vm:SelectionOverlayViewModel"
+        WindowDecorations="None"
+        ShowInTaskbar="False"
+        Topmost="True"
+        Background="#000000"
+        ExtendClientAreaToDecorationsHint="True"
+        Cursor="Cross">
+  <Panel Background="#000000" x:Name="RootPanel">
+    <!-- GPU-cached static background screen frame -->
+    <Image x:Name="BackgroundImage" Stretch="Fill" IsHitTestVisible="False" />
+
+    <!-- Ultra-lightweight vector overlay canvas: only draws 4 dark dimming rects + border -->
+    <controls:SelectionCanvas x:Name="OverlayCanvas" IsHitTestVisible="False" />
+
+    <!-- Top floating badge showing dimensions -->
+    <Border HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32" Padding="14,8"
+            Background="#EE0F172A" CornerRadius="8" IsHitTestVisible="False"
+            BorderBrush="#243044" BorderThickness="1">
+      <TextBlock Text="{Binding SelectionText}" Foreground="#F8FAFC" FontSize="14" FontWeight="SemiBold" />
+    </Border>
+
+    <!-- Bottom instructions banner -->
+    <Border HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,32" Padding="16,9"
+            Background="#EE0F172A" CornerRadius="8" IsHitTestVisible="False"
+            BorderBrush="#243044" BorderThickness="1">
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Ellipse Width="8" Height="8" Fill="#06B6D4" VerticalAlignment="Center" />
+        <TextBlock Text="Kéo chuột để chọn vùng · Thả chuột để mở Editor ngay · Phím Esc để hủy"
+                   Foreground="#E2E8F0" FontSize="13" VerticalAlignment="Center" AutomationProperties.Name="Selection keyboard instructions" />
+      </StackPanel>
+    </Border>
+  </Panel>
+</Window>

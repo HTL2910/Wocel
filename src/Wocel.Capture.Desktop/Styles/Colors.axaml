@@ -1,0 +1,19 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Styles.Resources>
+    <!-- Stitch Design System: Precision Glass Dark -->
+    <SolidColorBrush x:Key="AppBackgroundBrush">#0B1220</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceBrush">#0F172A</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceCardBrush">#151F33</SolidColorBrush>
+    <SolidColorBrush x:Key="SurfaceGlassBrush">#1E293B</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryBrush">#06B6D4</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryHoverBrush">#22D3EE</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentBrush">#EA580C</SolidColorBrush>
+    <SolidColorBrush x:Key="AccentHoverBrush">#F97316</SolidColorBrush>
+    <SolidColorBrush x:Key="ForegroundBrush">#F8FAFC</SolidColorBrush>
+    <SolidColorBrush x:Key="MutedForegroundBrush">#94A3B8</SolidColorBrush>
+    <SolidColorBrush x:Key="BorderBrush">#243044</SolidColorBrush>
+    <SolidColorBrush x:Key="BorderGlowBrush">#06B6D4</SolidColorBrush>
+    <SolidColorBrush x:Key="SuccessBrush">#10B981</SolidColorBrush>
+  </Styles.Resources>
+</Styles>

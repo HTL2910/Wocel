@@ -1,0 +1,10 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Wocel.Capture.Desktop.App"
+             RequestedThemeVariant="Dark">
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Wocel.Capture.Desktop/Styles/Colors.axaml" />
+    <StyleInclude Source="avares://Wocel.Capture.Desktop/Styles/Controls.axaml" />
+  </Application.Styles>
+</Application>

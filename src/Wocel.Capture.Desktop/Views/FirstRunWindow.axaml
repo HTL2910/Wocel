@@ -1,0 +1,31 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Wocel.Capture.Desktop.Views.FirstRunWindow"
+        Title="Set up Wocel Capture"
+        Width="560" Height="430"
+        MinWidth="480" MinHeight="380"
+        WindowStartupLocation="CenterScreen">
+  <ScrollViewer>
+    <StackPanel Margin="32" Spacing="16">
+      <TextBlock Text="Welcome to Wocel Capture" Classes="title" />
+      <TextBlock Text="Your captures and History are stored locally on this computer." TextWrapping="Wrap" />
+
+      <Border Classes="emptyCard">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Google Drive" Classes="sectionTitle" />
+          <TextBlock Text="Google sign-in is optional. Wocel requests only the drive.file scope for files it creates." TextWrapping="Wrap" />
+          <TextBlock Text="If you choose Create a public link, anyone with the link can view that uploaded image." Classes="disclosure" TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+
+      <Border Classes="emptyCard">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Screen Recording" Classes="sectionTitle" />
+          <TextBlock Text="On macOS, allow Screen Recording in System Settings. A restart may be required before capture works." TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+
+      <Button Content="Continue" Classes="primary" HorizontalAlignment="Right" Click="Continue" AutomationProperties.Name="Continue setup" />
+    </StackPanel>
+  </ScrollViewer>
+</Window>

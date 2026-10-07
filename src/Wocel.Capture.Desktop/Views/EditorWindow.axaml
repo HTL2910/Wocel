@@ -1,0 +1,366 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Wocel.Capture.Desktop.ViewModels"
+        xmlns:controls="using:Wocel.Capture.Desktop.Controls"
+        x:Class="Wocel.Capture.Desktop.Views.EditorWindow"
+        x:DataType="vm:EditorWindowViewModel"
+        Title="Wocel Capture — Skia Markup Studio"
+        Width="1160" Height="800"
+        MinWidth="860" MinHeight="600"
+        Background="{DynamicResource AppBackgroundBrush}">
+  
+  <Window.Styles>
+    <Style Selector="Button.colorSwatch">
+      <Setter Property="Width" Value="24" />
+      <Setter Property="Height" Value="24" />
+      <Setter Property="MinHeight" Value="24" />
+      <Setter Property="MinWidth" Value="24" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="BorderThickness" Value="1.5" />
+      <Setter Property="BorderBrush" Value="#334155" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Button.colorSwatch:pointerover">
+      <Setter Property="RenderTransform" Value="scale(1.18)" />
+      <Setter Property="BorderBrush" Value="#FFFFFF" />
+    </Style>
+
+    <Style Selector="Button.fontSizeChip">
+      <Setter Property="Height" Value="26" />
+      <Setter Property="MinHeight" Value="26" />
+      <Setter Property="Padding" Value="8,2" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="Background" Value="#151F33" />
+      <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+    </Style>
+    <Style Selector="Button.fontSizeChip:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="#1E293B" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderGlowBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="Auto,*,Auto">
+    <!-- Top Floating-style Glass Ribbon Toolbar -->
+    <Border Grid.Row="0" Classes="topbar" Padding="14,10">
+      <Grid ColumnDefinitions="*,Auto">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            
+            <!-- 1. Consolidated Drawing Parent Group (Draw & Shapes) -->
+            <DropDownButton Classes="secondary" ToolTip.Tip="Công cụ Vẽ &amp; Hình khối (P)">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Path x:Name="ActiveDrawIcon" 
+                      Data="M4,11 H13 V7 L20,12 L13,17 V13 H4 Z" 
+                      Fill="{DynamicResource PrimaryBrush}" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+                <TextBlock x:Name="ActiveDrawLabel" Text="Mũi tên" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" FontWeight="SemiBold" />
+              </StackPanel>
+              <DropDownButton.Flyout>
+                <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                  <MenuItem Header="Mũi tên (Arrow)" Tag="Arrow" Click="SelectDrawTool">
+                    <MenuItem.Icon>
+                      <Path Data="M4,11 H13 V7 L20,12 L13,17 V13 H4 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform"/>
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Bút vẽ tự do (Pen)" Tag="Pen" Click="SelectDrawTool">
+                    <MenuItem.Icon>
+                      <Path Data="M17,3 C17.8,2.2 19.2,2.2 20,3 C20.8,3.8 20.8,5.2 20,6 L7.5,18.5 L2,20 L3.5,14.5 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform"/>
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Dạ quang (Highlight)" Tag="Highlight" Click="SelectDrawTool">
+                    <MenuItem.Icon>
+                      <Path Data="M16.5,3.5 L20.5,7.5 L12,16 L8,12 Z M2,22 L6,21 L3,18 Z" Fill="#FBBF24" Width="13" Height="13" Stretch="Uniform"/>
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <Separator />
+                  <MenuItem Header="Hình chữ nhật (Rectangle)" Tag="Rectangle" Click="SelectDrawTool">
+                    <MenuItem.Icon>
+                      <Path Data="M3,3 H21 V21 H3 Z M5,5 V19 H19 V5 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform"/>
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Hình elip (Ellipse)" Tag="Ellipse" Click="SelectDrawTool">
+                    <MenuItem.Icon>
+                      <Path Data="M12,2 C6.48,2 2,6.48 2,12 C2,17.52 6.48,22 12,22 C17.52,22 22,17.52 22,12 C22,6.48 17.52,2 12,2 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform"/>
+                    </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Đường thẳng (Line)" Tag="Line" Click="SelectDrawTool">
+                    <MenuItem.Icon>
+                      <Path Data="M3,21 L21,3" Stroke="{DynamicResource ForegroundBrush}" StrokeThickness="2" Width="13" Height="13" Stretch="Uniform"/>
+                    </MenuItem.Icon>
+                  </MenuItem>
+                </MenuFlyout>
+              </DropDownButton.Flyout>
+            </DropDownButton>
+
+            <Rectangle Width="1" Height="22" Fill="{DynamicResource BorderBrush}" Margin="6,0" />
+
+            <!-- 2. Text Annotation -->
+            <Button Tag="Text" Click="SelectTool" Classes="secondary" ToolTip.Tip="Thêm văn bản ghi chú (T)">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Path Data="M4,4 H20 V7 H13 V20 H11 V7 H4 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+                <TextBlock Text="Text" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+
+            <!-- 3. Blur Redaction -->
+            <Button Tag="Blur" Click="SelectTool" Classes="secondary" ToolTip.Tip="Che mờ vùng nhạy cảm (B)">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Path Data="M4,4 H8 V8 H4 Z M10,4 H14 V8 H10 Z M16,4 H20 V8 H16 Z M4,10 H8 V14 H4 Z M10,10 H14 V14 H10 Z M16,10 H20 V14 H16 Z M4,16 H8 V20 H4 Z M10,16 H14 V20 H10 Z M16,16 H20 V20 H16 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+                <TextBlock Text="Blur" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+
+            <Rectangle Width="1" Height="22" Fill="{DynamicResource BorderBrush}" Margin="6,0" />
+
+            <!-- 4. Interactive Crop -->
+            <Button Tag="Crop" Click="SelectTool" Classes="secondary" ToolTip.Tip="Cắt ảnh tương tác (C)">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Path Data="M7,2 V17 H22 V19 H19 V22 H17 V19 H7 C5.9,19 5,18.1 5,17 V7 H2 V5 H5 V2 Z M9,7 H17 C18.1,7 19,7.9 19,9 V17 H17 V9 H9 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+                <TextBlock Text="Crop" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+
+            <Rectangle Width="1" Height="22" Fill="{DynamicResource BorderBrush}" Margin="6,0" />
+            
+            <!-- 5. History / Layer Actions -->
+            <Button Command="{Binding UndoCommand}" Classes="secondary" ToolTip.Tip="Hoàn tác (⌘Z)">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Path Data="M12.5,8 C9.85,8 7.45,8.99 5.6,10.6 L2,7 V16 H11 L7.38,12.38 C8.77,11.22 10.54,10.5 12.5,10.5 C16.04,10.5 19.05,12.81 20.1,16 L22.47,15.22 C21.08,11.03 17.15,8 12.5,8 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+                <TextBlock Text="Undo" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+
+            <Button Command="{Binding RedoCommand}" Classes="secondary" ToolTip.Tip="Làm lại (⇧⌘Z)">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Path Data="M11.5,8 C14.15,8 16.55,8.99 18.4,10.6 L22,7 V16 H13 L16.62,12.38 C15.23,11.22 13.46,10.5 11.5,10.5 C7.96,10.5 4.95,12.81 3.9,16 L1.53,15.22 C2.92,11.03 6.85,8 11.5,8 Z" Fill="{DynamicResource ForegroundBrush}" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+                <TextBlock Text="Redo" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+
+            <Button Command="{Binding DeleteCommand}" Classes="secondary" ToolTip.Tip="Xoá layer gần nhất (Delete)">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Path Data="M6,19 C6,20.1 6.9,21 8,21 H16 C17.1,21 18,20.1 18,19 V7 H6 Z M19,4 H15.5 L14.5,3 H9.5 L8.5,4 H5 V6 H19 Z" Fill="#EF4444" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+                <TextBlock Text="Delete" Foreground="#EF4444" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Right Engine Badge -->
+        <Border Grid.Column="1" Background="#151F33" CornerRadius="6" Padding="10,4" Margin="10,0,0,0" VerticalAlignment="Center" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <Ellipse Width="6" Height="6" Fill="{DynamicResource PrimaryBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="Skia 2D Studio" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" />
+          </StackPanel>
+        </Border>
+      </Grid>
+    </Border>
+
+    <!-- Canvas Workspace with Overlays -->
+    <Grid Grid.Row="1" Margin="14,10">
+      <Border Background="#070E1C" CornerRadius="10" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" ClipToBounds="True">
+        <controls:EditorCanvas x:Name="Canvas" />
+      </Border>
+
+      <!-- Overlay 1: Interactive Crop Confirmation Bar -->
+      <Border x:Name="CropActionBar" IsVisible="False"
+              HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,18,0,0"
+              Background="#151F33" BorderBrush="#EA580C" BorderThickness="1.5"
+              CornerRadius="20" Padding="14,8" BoxShadow="0 8 24 -4 #000000">
+        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <Path Data="M7,2 V17 H22 V19 H19 V22 H17 V19 H7 C5.9,19 5,18.1 5,17 V7 H2 V5 H5 V2 Z M9,7 H17 C18.1,7 19,7.9 19,9 V17 H17 V9 H9 Z" 
+                  Fill="#EA580C" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+            <TextBlock Text="Đã chọn vùng cắt" FontWeight="Medium" FontSize="12" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" />
+          </StackPanel>
+          <Rectangle Width="1" Height="16" Fill="{DynamicResource BorderBrush}" />
+          <Button Click="ConfirmCropClick" Classes="primary" Padding="12,5" MinHeight="28" CornerRadius="14">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Path Data="M9,16.17 L4.83,12 L3.41,13.41 L9,19 L21,7 L19.59,5.59 Z" Fill="#081018" Width="11" Height="11" Stretch="Uniform" VerticalAlignment="Center"/>
+              <TextBlock Text="Cắt ảnh (Enter)" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+          <Button Click="CancelCropClick" Classes="secondary" Padding="12,5" MinHeight="28" CornerRadius="14">
+            <TextBlock Text="Huỷ (Esc)" FontSize="12" VerticalAlignment="Center"/>
+          </Button>
+        </StackPanel>
+      </Border>
+
+      <!-- Overlay 2: In-place Text Input Card with Color & Font Size Swatches -->
+      <Border x:Name="TextInputCard" IsVisible="False"
+              HorizontalAlignment="Center" VerticalAlignment="Center"
+              Background="#151F33" BorderBrush="{DynamicResource PrimaryBrush}" BorderThickness="1.5"
+              CornerRadius="14" Padding="20" MinWidth="420" BoxShadow="0 14 36 -6 #000000">
+        <StackPanel Spacing="14">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <Path Data="M4,4 H20 V7 H13 V20 H11 V7 H4 Z" Fill="{DynamicResource PrimaryBrush}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" />
+              <TextBlock Text="Thêm văn bản ghi chú" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" />
+            </StackPanel>
+            <Button Grid.Column="1" Click="CancelTextInputClick" Classes="secondary" Padding="6,2" MinHeight="24" CornerRadius="12">
+              <TextBlock Text="✕" FontSize="11" Foreground="{DynamicResource MutedForegroundBrush}" />
+            </Button>
+          </Grid>
+
+          <!-- 1. Color Palette Picker -->
+          <Border Background="#0C1321" CornerRadius="8" Padding="10,8" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <TextBlock Text="Màu chữ:" FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" VerticalAlignment="Center" Margin="0,0,4,0" />
+              <Button Tag="#06B6D4" Click="SelectTextColor" Classes="colorSwatch" Background="#06B6D4" ToolTip.Tip="Electric Cyan" />
+              <Button Tag="#EA580C" Click="SelectTextColor" Classes="colorSwatch" Background="#EA580C" ToolTip.Tip="Neon Orange" />
+              <Button Tag="#10B981" Click="SelectTextColor" Classes="colorSwatch" Background="#10B981" ToolTip.Tip="Emerald Green" />
+              <Button Tag="#FFFFFF" Click="SelectTextColor" Classes="colorSwatch" Background="#FFFFFF" ToolTip.Tip="Pure White" />
+              <Button Tag="#EF4444" Click="SelectTextColor" Classes="colorSwatch" Background="#EF4444" ToolTip.Tip="Crimson Red" />
+              <Button Tag="#F59E0B" Click="SelectTextColor" Classes="colorSwatch" Background="#F59E0B" ToolTip.Tip="Amber Yellow" />
+              <Button Tag="#A855F7" Click="SelectTextColor" Classes="colorSwatch" Background="#A855F7" ToolTip.Tip="Violet Purple" />
+              <Border x:Name="ActiveColorIndicator" Width="10" Height="10" CornerRadius="5" Background="#06B6D4" Margin="6,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+
+          <!-- 2. Font Size Selector Chips -->
+          <Border Background="#0C1321" CornerRadius="8" Padding="10,6" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <TextBlock Text="Cỡ chữ:" FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" VerticalAlignment="Center" Margin="0,0,4,0" />
+              <Button Tag="14" Click="SelectFontSize" Classes="fontSizeChip" Content="14px" ToolTip.Tip="Nhỏ (14px)" />
+              <Button Tag="18" Click="SelectFontSize" Classes="fontSizeChip" Content="18px" ToolTip.Tip="Vừa (18px - Mặc định)" />
+              <Button Tag="24" Click="SelectFontSize" Classes="fontSizeChip" Content="24px" ToolTip.Tip="Lớn (24px)" />
+              <Button Tag="32" Click="SelectFontSize" Classes="fontSizeChip" Content="32px" ToolTip.Tip="Tiêu đề (32px)" />
+              <Button Tag="48" Click="SelectFontSize" Classes="fontSizeChip" Content="48px" ToolTip.Tip="Rất lớn (48px)" />
+            </StackPanel>
+          </Border>
+          
+          <TextBox x:Name="TextInputBox" PlaceholderText="Nhập nội dung ghi chú..."
+                   AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="100"
+                   Background="#0B1220" BorderBrush="{DynamicResource BorderBrush}"
+                   Foreground="#06B6D4" FontSize="18" FontWeight="Medium" CornerRadius="8"
+                   KeyDown="TextInputBox_KeyDown" />
+                   
+          <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+            <TextBlock Text="Enter để thêm • Esc huỷ" FontSize="11" Foreground="{DynamicResource MutedForegroundBrush}" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Click="CancelTextInputClick" Classes="secondary" Content="Huỷ" Padding="14,6" MinHeight="30" />
+            <Button Grid.Column="2" Click="ConfirmTextInputClick" Classes="primary" Content="Xác nhận" Padding="14,6" MinHeight="30" />
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- ImageKit.io Cloud Settings Modal Overlay -->
+      <Border x:Name="ImageKitModalOverlay" IsVisible="False"
+              Background="#B3050B14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Border Width="520" Background="#0F172A" CornerRadius="14"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                Padding="24" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <StackPanel Spacing="16">
+            <!-- Modal Header -->
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <Border Background="#1E293B" Width="36" Height="36" CornerRadius="8" BorderBrush="#0284C7" BorderThickness="1">
+                  <Path Data="M19.35,10.04 C18.67,6.59 15.64,4 12,4 C9.11,4 6.6,5.64 5.35,8.04 C2.34,8.36 0,10.91 0,14 C0,17.31 2.69,20 6,20 H19 C21.76,20 24,17.76 24,15 C24,12.36 21.95,10.22 19.35,10.04 Z"
+                        Fill="#06B6D4" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                  <TextBlock Text="Cấu hình ImageKit.io Cloud" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" />
+                  <TextBlock Text="Lưu ảnh riêng tư &amp; tự động tạo link chia sẻ" FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" />
+                </StackPanel>
+              </StackPanel>
+              <Button Grid.Column="1" Click="CloseImageKitSettingsClick" Classes="tool" Content="✕" ToolTip.Tip="Đóng" MinWidth="32" MinHeight="32" Padding="0" />
+            </Grid>
+
+            <!-- Guide Box with Direct Link Button -->
+            <Border Background="#0C1B2E" CornerRadius="10" BorderBrush="#0369A1" BorderThickness="1" Padding="14">
+              <StackPanel Spacing="8">
+                <TextBlock Text="💡 Hướng dẫn lấy API Key miễn phí (20 GB vĩnh viễn):" FontWeight="SemiBold" FontSize="12" Foreground="#38BDF8" />
+                <TextBlock Text="1. Bấm nút dưới để mở thẳng trang API Keys trên trình duyệt:" FontSize="11" Foreground="{DynamicResource MutedForegroundBrush}" />
+                <Button Click="OpenImageKitApiKeysPage" Classes="secondary" HorizontalAlignment="Left" Padding="12,6" Margin="0,2,0,2">
+                  <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="🔗 Mở trang lấy API Key (ImageKit.io) ↗" FontSize="12" FontWeight="SemiBold" Foreground="#38BDF8" VerticalAlignment="Center" />
+                  </StackPanel>
+                </Button>
+                <TextBlock Text="2. Copy URL-endpoint và Private API Key dán vào 2 ô bên dưới." FontSize="11" Foreground="{DynamicResource MutedForegroundBrush}" />
+              </StackPanel>
+            </Border>
+
+            <!-- Form Inputs -->
+            <StackPanel Spacing="12">
+              <StackPanel Spacing="4">
+                <TextBlock Text="URL-endpoint:" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
+                <TextBox x:Name="ImageKitUrlEndpointBox" PlaceholderText="vd: https://ik.imagekit.io/wocel_team"
+                         Background="#0B1220" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="6" FontSize="13" />
+              </StackPanel>
+
+              <StackPanel Spacing="4">
+                <Grid ColumnDefinitions="*,Auto">
+                  <TextBlock Text="Private API Key:" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
+                  <Button Grid.Column="1" Click="ToggleApiKeyVisibilityClick" Classes="tool" Content="👁 Hiện/Ẩn" FontSize="11" Padding="6,2" MinHeight="22" />
+                </Grid>
+                <TextBox x:Name="ImageKitPrivateKeyBox" PlaceholderText="vd: private_xxxxxxxxxxxxxxxxxxxxxxxx"
+                         PasswordChar="•" Background="#0B1220" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="6" FontSize="13" />
+              </StackPanel>
+
+              <StackPanel Spacing="4">
+                <TextBlock Text="Thư mục lưu trữ (Folder):" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
+                <TextBox x:Name="ImageKitFolderBox" Text="/wocel-captures"
+                         Background="#0B1220" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="6" FontSize="13" />
+              </StackPanel>
+            </StackPanel>
+
+            <!-- Status text -->
+            <TextBlock x:Name="ImageKitStatusLabel" Text="" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource MutedForegroundBrush}" TextWrapping="Wrap" />
+
+            <!-- Action buttons -->
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8">
+              <Button Click="TestImageKitConnectionClick" Classes="secondary" Content="Kiểm tra kết nối" MinHeight="32" Padding="12,6" />
+              <Button Grid.Column="2" Click="CloseImageKitSettingsClick" Classes="secondary" Content="Huỷ" MinHeight="32" Padding="14,6" />
+              <Button Grid.Column="3" Click="SaveImageKitSettingsClick" Classes="primary" Content="Lưu cấu hình" MinHeight="32" Padding="16,6" />
+            </Grid>
+          </StackPanel>
+        </Border>
+      </Border>
+    </Grid>
+
+    <!-- Bottom Floating-style Action Bar -->
+    <Border Grid.Row="2" Classes="statusbar" Padding="16,10">
+      <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="16" VerticalAlignment="Center">
+        <!-- Active Tool Pill Indicator -->
+        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <Border Background="#151F33" CornerRadius="6" Padding="10,5" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <TextBlock Text="Đang chọn:" FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding SelectedTool}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <!-- ImageKit Cloud Sync Toggle & Settings Button -->
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <CheckBox x:Name="ImageKitAutoUploadCheck" IsChecked="{Binding AutoUpload}" Click="ImageKitCheckClicked" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <Path Data="M19.35,10.04 C18.67,6.59 15.64,4 12,4 C9.11,4 6.6,5.64 5.35,8.04 C2.34,8.36 0,10.91 0,14 C0,17.31 2.69,20 6,20 H19 C21.76,20 24,17.76 24,15 C24,12.36 21.95,10.22 19.35,10.04 Z" Fill="#06B6D4" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" />
+              <TextBlock Text="Tải lên ImageKit" VerticalAlignment="Center" />
+            </StackPanel>
+          </CheckBox>
+          <Button Click="OpenImageKitSettingsClick" Classes="tool" ToolTip.Tip="Cài đặt API Key ImageKit Cloud" MinWidth="28" MinHeight="28" Padding="4" VerticalAlignment="Center">
+            <Path Data="M19.14,12.94 C19.18,12.63 19.2,12.32 19.2,12 C19.2,11.68 19.18,11.37 19.14,11.06 L21.16,9.48 C21.34,9.34 21.39,9.08 21.28,8.88 L19.36,5.55 C19.24,5.35 19,5.27 18.78,5.36 L16.4,6.32 C15.9,5.94 15.37,5.62 14.79,5.38 L14.43,2.85 C14.4,2.62 14.2,2.45 13.97,2.45 H10.03 C9.8,2.45 9.6,2.62 9.57,2.85 L9.21,5.38 C8.63,5.62 8.1,5.94 7.6,6.32 L5.22,5.36 C5,5.27 4.76,5.35 4.64,5.55 L2.72,8.88 C2.61,9.08 2.66,9.34 2.84,9.48 L4.86,11.06 C4.82,11.37 4.8,11.68 4.8,12 C4.8,12.32 4.82,12.63 4.86,12.94 L2.84,14.52 C2.66,14.66 2.61,14.92 2.72,15.12 L4.64,18.45 C4.76,18.65 5,18.73 5.22,18.64 L7.6,17.68 C8.1,18.06 8.63,18.38 9.21,18.62 L9.57,21.15 C9.6,21.38 9.8,21.55 10.03,21.55 H13.97 C14.2,21.55 14.4,21.38 14.43,21.15 L14.79,18.62 C15.37,18.38 15.9,18.06 16.4,17.68 L18.78,18.64 C19,18.73 19.24,18.65 19.36,18.45 L21.28,15.12 C21.39,14.92 21.34,14.66 21.16,14.52 L19.14,12.94 Z M12,15.5 C10.07,15.5 8.5,13.93 8.5,12 C8.5,10.07 10.07,8.5 12,8.5 C13.93,8.5 15.5,10.07 15.5,12 C15.5,13.93 13.93,15.5 12,15.5 Z"
+                  Fill="{DynamicResource ForegroundBrush}" Width="14" Height="14" Stretch="Uniform" />
+          </Button>
+        </StackPanel>
+
+        <!-- Primary Action Button: Glowing Cyan with Copy Icon -->
+        <Button Grid.Column="2" Click="ExportImage" AutomationProperties.Name="Export image" Classes="primary" VerticalAlignment="Center">
+          <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <Path Data="M16,1 H4 C2.9,1 2,1.9 2,3 V17 H4 V3 H16 Z M19,5 H8 C6.9,5 6,5.9 6,7 V21 C6,22.1 6.9,23 8,23 H19 C20.1,23 21,22.1 21,21 V7 C21,5.9 20.1,5 19,5 Z M19,21 H8 V7 H19 Z" Fill="#081018" Width="13" Height="13" Stretch="Uniform" VerticalAlignment="Center" />
+            <TextBlock Text="Lưu &amp; Sao chép PNG" FontWeight="SemiBold" VerticalAlignment="Center" />
+          </StackPanel>
+        </Button>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>
