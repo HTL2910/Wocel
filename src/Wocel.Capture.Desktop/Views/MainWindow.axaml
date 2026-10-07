@@ -5,14 +5,22 @@
         x:DataType="vm:MainWindowViewModel"
         Title="Wocel Capture"
         Icon="avares://Wocel.Capture.Desktop/Assets/app-icon.png"
-        Width="1020" Height="700"
-        MinWidth="800" MinHeight="560"
+        Width="680" Height="620"
+        MinWidth="540" MinHeight="480"
         Background="{DynamicResource AppBackgroundBrush}">
+
+  <Window.Styles>
+    <!-- Hide the default TabStrip headers so views act as clean panels controlled by top bar -->
+    <Style Selector="TabControl.cleanViews /template/ ItemsPresenter#PART_ItemsPresenter">
+      <Setter Property="IsVisible" Value="False" />
+    </Style>
+  </Window.Styles>
+
   <Grid RowDefinitions="Auto,*,Auto">
-    <!-- Topbar: Precision Titanium Glass Header -->
+    <!-- Topbar: Sleek Header with Setting and Capture on Top -->
     <Border Grid.Row="0" Classes="topbar">
-      <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
-        <StackPanel Spacing="4" VerticalAlignment="Center">
+      <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+        <StackPanel Spacing="3" VerticalAlignment="Center">
           <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
             <Ellipse Width="10" Height="10" Fill="{DynamicResource PrimaryBrush}" VerticalAlignment="Center" />
             <TextBlock Text="Wocel Capture" Classes="title" VerticalAlignment="Center" />
@@ -20,92 +28,139 @@
               <TextBlock Text="PRO" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource PrimaryBrush}" />
             </Border>
           </StackPanel>
-          <TextBlock Text="Hardware-accelerated screen capture, Skia markup &amp; instant Google Drive sync" Classes="subtitle" />
+          <TextBlock Text="Chụp ảnh màn hình &amp; Chú thích tức thì" Classes="subtitle" />
         </StackPanel>
         
+        <!-- Button Cài đặt (Bỏ lên trên cho gọn) -->
         <Button Grid.Column="1"
                 Command="{Binding ShowSettingsCommand}"
                 AutomationProperties.Name="Sign in with Google"
                 Classes="secondary"
+                ToolTip.Tip="Cài đặt thư mục lưu &amp; Cloud (ImageKit)"
                 VerticalAlignment="Center">
-          <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-            <Path Data="M19.35,10.04 C18.67,6.59 15.64,4 12,4 C9.11,4 6.6,5.64 5.35,8.04 C2.34,8.36 0,10.91 0,14 C0,17.31 2.69,20 6,20 H19 C21.76,20 24,17.76 24,15 C24,12.36 21.95,10.22 19.35,10.04 Z"
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <Path Data="M19.14,12.94 C19.18,12.63 19.2,12.32 19.2,12 C19.2,11.68 19.18,11.37 19.14,11.06 L21.16,9.48 C21.34,9.34 21.39,9.08 21.28,8.87 L19.36,5.55 C19.24,5.34 18.99,5.26 18.77,5.35 L16.39,6.31 C15.9,5.93 15.36,5.62 14.78,5.38 L14.42,2.85 C14.38,2.61 14.18,2.43 13.93,2.43 L10.07,2.43 C9.82,2.43 9.62,2.61 9.58,2.85 L9.22,5.38 C8.64,5.62 8.1,5.94 7.61,6.31 L5.23,5.35 C5.01,5.26 4.76,5.34 4.64,5.55 L2.72,8.87 C2.61,9.08 2.66,9.34 2.84,9.48 L4.86,11.06 C4.82,11.37 4.8,11.69 4.8,12 C4.8,12.31 4.82,12.63 4.86,12.94 L2.84,14.52 C2.66,14.66 2.61,14.92 2.72,15.13 L4.64,18.45 C4.76,18.66 5.01,18.74 5.23,18.65 L7.61,17.69 C8.1,18.07 8.64,18.38 9.22,18.62 L9.58,21.15 C9.62,21.39 9.82,21.57 10.07,21.57 L13.93,21.57 C14.18,21.57 14.38,21.39 14.42,21.15 L14.78,18.62 C15.36,18.38 15.9,18.06 16.39,17.69 L18.77,18.65 C18.99,18.74 19.24,18.66 19.36,18.45 L21.28,15.13 C21.39,14.92 21.34,14.66 21.16,14.52 L19.14,12.94 Z M12,15.5 C10.07,15.5 8.5,13.93 8.5,12 C8.5,10.07 10.07,8.5 12,8.5 C13.93,8.5 15.5,10.07 15.5,12 C15.5,13.93 13.93,15.5 12,15.5 Z"
                   Fill="{DynamicResource PrimaryBrush}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" />
-            <TextBlock Text="Cài đặt Cloud (ImageKit)" VerticalAlignment="Center" />
+            <TextBlock Text="Cài đặt" FontWeight="SemiBold" VerticalAlignment="Center" />
           </StackPanel>
         </Button>
         
+        <!-- Button Chụp ảnh -->
         <Button Grid.Column="2"
                 Command="{Binding CaptureCommand}"
                 AutomationProperties.Name="Capture screen"
                 Classes="primary"
                 VerticalAlignment="Center">
           <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-            <!-- Camera / Crosshair Icon -->
             <Path Data="M9,2 L7.17,4 H4 C2.9,4 2,4.9 2,6 V18 C2,19.1 2.9,20 4,20 H20 C21.1,20 22,19.1 22,18 V6 C22,4.9 21.1,4 20,4 H16.83 L15,2 H9 Z M12,17 C9.24,17 7,14.76 7,12 C7,9.24 9.24,7 12,7 C14.76,7 17,9.24 17,12 C17,14.76 14.76,17 12,17 Z"
-                  Fill="#081018" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" />
-            <TextBlock Text="Capture" FontWeight="SemiBold" VerticalAlignment="Center" />
+                  Fill="{DynamicResource PrimaryForegroundBrush}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" />
+            <TextBlock Text="Chụp màn hình" FontWeight="Bold" VerticalAlignment="Center" />
           </StackPanel>
         </Button>
       </Grid>
     </Border>
 
-    <!-- Main Content Tabs -->
-    <TabControl Grid.Row="1" Margin="24,16,24,16" SelectedIndex="{Binding SelectedTabIndex}">
-      <TabItem Header="History">
-        <Grid RowDefinitions="Auto,*" Margin="4,16,4,4">
-          <TextBlock Text="Recent captures" Classes="sectionTitle" Margin="0,0,0,12" />
-          <Border Grid.Row="1" Classes="emptyCard">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
-              <Border Background="#1E293B" Width="56" Height="56" CornerRadius="28" HorizontalAlignment="Center" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
-                <Path Data="M9,2 L7.17,4 H4 C2.9,4 2,4.9 2,6 V18 C2,19.1 2.9,20 4,20 H20 C21.1,20 22,19.1 22,18 V6 C22,4.9 21.1,4 20,4 H16.83 L15,2 H9 Z M12,17 C9.24,17 7,14.76 7,12 C7,9.24 9.24,7 12,7 C14.76,7 17,9.24 17,12 C17,14.76 14.76,17 12,17 Z"
-                      Fill="{DynamicResource PrimaryBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    <!-- Main Content: Clean Switchable Views (Dashboard or Settings) -->
+    <TabControl Grid.Row="1" Classes="cleanViews" SelectedIndex="{Binding SelectedTabIndex}" Margin="20,16">
+      
+      <!-- View 0: Sleek Capture Dashboard -->
+      <TabItem Header="Capture">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+          <StackPanel Spacing="16" MaxWidth="620" HorizontalAlignment="Center" Margin="0,10">
+
+            <!-- Hero Card: Quick Capture Trigger -->
+            <Border Background="#0C1527" CornerRadius="14" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="28,24">
+              <StackPanel Spacing="16" HorizontalAlignment="Center">
+                <Border Background="#1E293B" Width="64" Height="64" CornerRadius="32" HorizontalAlignment="Center" BorderBrush="{DynamicResource BorderGlowBrush}" BorderThickness="1.5">
+                  <Path Data="M9,2 L7.17,4 H4 C2.9,4 2,4.9 2,6 V18 C2,19.1 2.9,20 4,20 H20 C21.1,20 22,19.1 22,18 V6 C22,4.9 21.1,4 20,4 H16.83 L15,2 H9 Z M12,17 C9.24,17 7,14.76 7,12 C7,9.24 9.24,7 12,7 C14.76,7 17,9.24 17,12 C17,14.76 14.76,17 12,17 Z"
+                        Fill="{DynamicResource PrimaryBrush}" Width="28" Height="28" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+
+                <StackPanel Spacing="6" HorizontalAlignment="Center">
+                  <TextBlock Text="Sẵn sàng chụp ảnh màn hình" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource ForegroundBrush}" HorizontalAlignment="Center" />
+                  <TextBlock Text="Bấm nút chụp hoặc dùng phím tắt hệ thống bất kỳ lúc nào" Classes="muted" HorizontalAlignment="Center" TextAlignment="Center" />
+                </StackPanel>
+
+                <Button Command="{Binding CaptureCommand}" Classes="primary" HorizontalAlignment="Center" Padding="24,12" MinHeight="42">
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Path Data="M9,2 L7.17,4 H4 C2.9,4 2,4.9 2,6 V18 C2,19.1 2.9,20 4,20 H20 C21.1,20 22,19.1 22,18 V6 C22,4.9 21.1,4 20,4 H16.83 L15,2 H9 Z M12,17 C9.24,17 7,14.76 7,12 C7,9.24 9.24,7 12,7 C14.76,7 17,9.24 17,12 C17,14.76 14.76,17 12,17 Z"
+                          Fill="{DynamicResource PrimaryForegroundBrush}" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" />
+                    <TextBlock Text="Bắt đầu chụp (Chọn vùng)" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
+                  </StackPanel>
+                </Button>
+              </StackPanel>
+            </Border>
+
+            <!-- Quick Action & Status Cards -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+              <!-- Local Storage Quick Access -->
+              <Border Grid.Column="0" Background="#0C1527" CornerRadius="12" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="16">
+                <StackPanel Spacing="8">
+                  <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="📁" FontSize="14" VerticalAlignment="Center" />
+                    <TextBlock Text="Thư mục lưu ảnh" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" />
+                  </StackPanel>
+                  <TextBlock x:Name="CurrentSaveDirLabel" Text="~/Pictures/WocelCaptures" FontSize="11" Classes="muted" TextTrimming="CharacterEllipsis" />
+                  <Button Click="OpenLocalFolderClick" Classes="secondary" Content="Mở thư mục ↗" Padding="12,6" MinHeight="28" HorizontalAlignment="Left" />
+                </StackPanel>
               </Border>
-              <TextBlock Text="No captures yet" FontWeight="SemiBold" FontSize="16" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}" />
-              <TextBlock Text="Use Capture or your global shortcut to begin." Classes="muted" HorizontalAlignment="Center" />
-            </StackPanel>
-          </Border>
-        </Grid>
+
+              <!-- Cloud Status Card -->
+              <Border Grid.Column="1" Background="#0C1527" CornerRadius="12" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="16">
+                <StackPanel Spacing="8">
+                  <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="☁️" FontSize="14" VerticalAlignment="Center" />
+                    <TextBlock Text="ImageKit Cloud" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" />
+                  </StackPanel>
+                  <TextBlock x:Name="CurrentCloudStatusLabel" Text="Chưa cấu hình (Lưu tại máy)" FontSize="11" Classes="muted" />
+                  <Button Command="{Binding ShowSettingsCommand}" Classes="secondary" Content="Cài đặt Cloud ↗" Padding="12,6" MinHeight="28" HorizontalAlignment="Left" />
+                </StackPanel>
+              </Border>
+            </Grid>
+
+          </StackPanel>
+        </ScrollViewer>
       </TabItem>
-      
-      <TabItem Header="Log">
-        <Grid Margin="4,16,4,4">
-          <Border Classes="emptyCard">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
-              <TextBlock Text="Activity log" FontWeight="SemiBold" FontSize="15" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}" />
-              <TextBlock Text="Activity log will show capture, save and upload results." Classes="muted" HorizontalAlignment="Center" />
-            </StackPanel>
-          </Border>
-        </Grid>
-      </TabItem>
-      
+
+      <!-- View 1: Settings Form -->
       <TabItem Header="Settings">
         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-          <Border Classes="emptyCard" Margin="4,16,4,4" HorizontalAlignment="Stretch">
-            <StackPanel Spacing="18" MaxWidth="680" HorizontalAlignment="Left">
-              <!-- Header -->
-              <StackPanel Spacing="4">
-                <TextBlock Text="Cấu hình Lưu trữ Cloud (ImageKit.io)" Classes="sectionTitle" />
-                <TextBlock Text="Lưu ảnh riêng tư, bảo mật cho team, tải lên siêu tốc và tự động sao chép link chia sẻ vào clipboard." Classes="muted" TextWrapping="Wrap" />
-              </StackPanel>
+          <Border Classes="emptyCard" Margin="0,4" HorizontalAlignment="Stretch">
+            <StackPanel Spacing="16" MaxWidth="620" HorizontalAlignment="Center">
+              <!-- Header with Back Button -->
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Cài đặt Ứng dụng" Classes="sectionTitle" />
+                  <TextBlock Text="Tuỳ chỉnh nơi lưu ảnh tại máy và kết nối ImageKit Cloud." Classes="muted" />
+                </StackPanel>
+                <Button Grid.Column="1" Click="BackToHomeClick" Classes="secondary" Padding="12,6" MinHeight="30" VerticalAlignment="Center">
+                  <TextBlock Text="← Quay lại" FontSize="12" FontWeight="SemiBold" />
+                </Button>
+              </Grid>
 
               <!-- Step-by-step Guide Card with Button -->
-              <Border Background="#0C1B2E" CornerRadius="10" BorderBrush="#0369A1" BorderThickness="1" Padding="16">
-                <StackPanel Spacing="10">
-                  <TextBlock Text="💡 3 bước lấy API Key miễn phí (20 GB vĩnh viễn):" FontWeight="SemiBold" FontSize="13" Foreground="#38BDF8" />
-                  <TextBlock Text="1. Bấm nút dưới để mở thẳng trang quản lý API Keys trên ImageKit (đăng ký miễn phí nếu chưa có):" FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" />
-                  <Button Click="OpenImageKitApiKeysPage" Classes="secondary" HorizontalAlignment="Left" Padding="14,8">
-                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                      <TextBlock Text="🔗 Mở trang lấy API Key (ImageKit.io) ↗" FontWeight="SemiBold" Foreground="#38BDF8" VerticalAlignment="Center" />
-                    </StackPanel>
+              <Border Background="#0C1B2E" CornerRadius="10" BorderBrush="#0369A1" BorderThickness="1" Padding="14">
+                <StackPanel Spacing="8">
+                  <TextBlock Text="💡 3 bước lấy API Key ImageKit miễn phí (20 GB vĩnh viễn):" FontWeight="SemiBold" FontSize="13" Foreground="#38BDF8" />
+                  <TextBlock Text="1. Bấm nút dưới để mở trang API Keys (đăng ký miễn phí nếu chưa có):" FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" />
+                  <Button Click="OpenImageKitApiKeysPage" Classes="secondary" HorizontalAlignment="Left" Padding="12,6">
+                    <TextBlock Text="🔗 Mở trang lấy API Key (ImageKit.io) ↗" FontWeight="SemiBold" Foreground="#38BDF8" VerticalAlignment="Center" />
                   </Button>
-                  <TextBlock Text="2. Tại bảng Developer Options, copy giá trị URL-endpoint (dạng: https://ik.imagekit.io/your_id)." FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" />
-                  <TextBlock Text="3. Bấm View/Copy tại Private API Key (dạng: private_xxxx) rồi dán vào 2 ô bên dưới." FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" />
+                  <TextBlock Text="2. Copy URL-endpoint (dạng: https://ik.imagekit.io/your_id) và Private API Key (dạng: private_xxxx)." FontSize="12" Foreground="{DynamicResource MutedForegroundBrush}" />
                 </StackPanel>
               </Border>
 
               <!-- Form Inputs -->
-              <StackPanel Spacing="14">
+              <StackPanel Spacing="12">
+                <StackPanel Spacing="4">
+                  <TextBlock Text="Thư mục lưu mặc định trên máy (Local):" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
+                  <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6">
+                    <TextBox x:Name="LocalSaveDirectoryBox" PlaceholderText="Mặc định: ~/Pictures/WocelCaptures"
+                             Background="#0B1220" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="6" FontSize="13" />
+                    <Button Grid.Column="1" Click="BrowseLocalFolderClick" Classes="secondary" Content="Duyệt..." MinHeight="32" Padding="10,4" />
+                  </Grid>
+                </StackPanel>
+
                 <StackPanel Spacing="4">
                   <TextBlock Text="URL-endpoint:" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
                   <TextBox x:Name="ImageKitUrlEndpointBox" PlaceholderText="vd: https://ik.imagekit.io/wocel_team"
@@ -128,7 +183,7 @@
                 </StackPanel>
 
                 <CheckBox x:Name="ImageKitAutoUploadCheck" Content="Tự động tải lên ImageKit sau khi chụp ảnh và sao chép link"
-                          Foreground="{DynamicResource ForegroundBrush}" Margin="0,4,0,0" />
+                          Foreground="{DynamicResource ForegroundBrush}" Margin="0,2,0,0" />
               </StackPanel>
 
               <!-- Status Notification -->
@@ -136,8 +191,8 @@
 
               <!-- Action Buttons -->
               <StackPanel Orientation="Horizontal" Spacing="12">
-                <Button Click="TestImageKitConnectionClick" Classes="secondary" Content="Kiểm tra kết nối" MinHeight="36" Padding="16,8" />
-                <Button Click="SaveImageKitSettingsClick" Classes="primary" Content="Lưu cấu hình Cloud" MinHeight="36" Padding="20,8" />
+                <Button Click="TestImageKitConnectionClick" Classes="secondary" Content="Kiểm tra kết nối" MinHeight="34" Padding="14,6" />
+                <Button Click="SaveImageKitSettingsClick" Classes="primary" Content="Lưu cấu hình" MinHeight="34" Padding="18,6" />
               </StackPanel>
             </StackPanel>
           </Border>

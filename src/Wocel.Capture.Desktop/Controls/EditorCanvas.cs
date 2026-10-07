@@ -78,7 +78,7 @@ public sealed class EditorCanvas : Control
             _isDirty = false;
         }
 
-        var fitted = Fit(_cachedBitmap.PixelSize.Width, _cachedBitmap.PixelSize.Height);
+        var fitted = GetImageFittedBounds();
         context.DrawImage(_cachedBitmap, fitted);
 
         // 1. Live Real-time Preview during mouse drag
@@ -86,16 +86,19 @@ public sealed class EditorCanvas : Control
         {
             var dragBox = CapturePixelRect.FromPoints(_start.Value, _currentPointer.Value);
             var canvasRect = ToCanvasRect(dragBox);
+            var activeColor = Color.Parse(Editor.CurrentColorHex);
+            var activeBrush = new SolidColorBrush(activeColor);
+            var strokePen = new Pen(activeBrush, 3, lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
+            var shapePen = new Pen(activeBrush, 2.5);
 
             switch (Editor.SelectedTool)
             {
                 case EditorTool.Pen:
                     if (_stroke.Count > 1)
                     {
-                        var penStyle = new Pen(new SolidColorBrush(Color.Parse("#EA580C")), 3, lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
                         for (int i = 0; i < _stroke.Count - 1; i++)
                         {
-                            context.DrawLine(penStyle, ToCanvasPoint(_stroke[i]), ToCanvasPoint(_stroke[i + 1]));
+                            context.DrawLine(strokePen, ToCanvasPoint(_stroke[i]), ToCanvasPoint(_stroke[i + 1]));
                         }
                     }
                     break;
@@ -114,22 +117,21 @@ public sealed class EditorCanvas : Control
                 case EditorTool.Arrow:
                     var ap1 = ToCanvasPoint(_start.Value);
                     var ap2 = ToCanvasPoint(_currentPointer.Value);
-                    var arrowPen = new Pen(new SolidColorBrush(Color.Parse("#EA580C")), 3, lineCap: PenLineCap.Round);
-                    DrawLiveArrow(context, ap1, ap2, arrowPen);
+                    DrawLiveArrow(context, ap1, ap2, strokePen);
                     break;
 
                 case EditorTool.Line:
                     var lp1 = ToCanvasPoint(_start.Value);
                     var lp2 = ToCanvasPoint(_currentPointer.Value);
-                    context.DrawLine(new Pen(new SolidColorBrush(Color.Parse("#EA580C")), 3, lineCap: PenLineCap.Round), lp1, lp2);
+                    context.DrawLine(strokePen, lp1, lp2);
                     break;
 
                 case EditorTool.Rectangle:
-                    context.DrawRectangle(new Pen(new SolidColorBrush(Color.Parse("#EA580C")), 2.5), canvasRect);
+                    context.DrawRectangle(shapePen, canvasRect);
                     break;
 
                 case EditorTool.Ellipse:
-                    context.DrawEllipse(null, new Pen(new SolidColorBrush(Color.Parse("#EA580C")), 2.5),
+                    context.DrawEllipse(null, shapePen,
                         canvasRect.Center, canvasRect.Width / 2, canvasRect.Height / 2);
                     break;
 
@@ -181,19 +183,17 @@ public sealed class EditorCanvas : Control
     public CapturePixelPoint ToSourcePoint(Point point)
     {
         if (Editor is null) throw new InvalidOperationException("Editor is not assigned.");
-        var size = RenderedSize();
-        var fitted = Fit(size.Width, size.Height);
+        var fitted = GetImageFittedBounds();
         var local = new CapturePixelPoint(
-            (int)Math.Round(Math.Clamp(point.X - fitted.X, 0, fitted.Width - 1)),
-            (int)Math.Round(Math.Clamp(point.Y - fitted.Y, 0, fitted.Height - 1)));
-        return EditorCanvasMapper.ToSource(Editor.Document, local, new CapturePixelSize((int)fitted.Width, (int)fitted.Height));
+            (int)Math.Round(Math.Clamp(point.X - fitted.X, 0, Math.Max(0, fitted.Width - 1))),
+            (int)Math.Round(Math.Clamp(point.Y - fitted.Y, 0, Math.Max(0, fitted.Height - 1))));
+        return EditorCanvasMapper.ToSource(Editor.Document, local, new CapturePixelSize((int)Math.Max(1, fitted.Width), (int)Math.Max(1, fitted.Height)));
     }
 
     public Rect ToCanvasRect(CapturePixelRect sourceRect)
     {
         if (Editor is null) return default;
-        var size = RenderedSize();
-        var fitted = Fit(size.Width, size.Height);
+        var fitted = GetImageFittedBounds();
         var sourceBounds = new CapturePixelRect(0, 0, Editor.Document.SourceSize.Width, Editor.Document.SourceSize.Height);
         var crop = Editor.Document.Layers.OfType<Wocel.Capture.Editor.CropLayer>().LastOrDefault()?.CropBounds ?? sourceBounds;
 
@@ -214,8 +214,7 @@ public sealed class EditorCanvas : Control
     public Point ToCanvasPoint(CapturePixelPoint sourcePoint)
     {
         if (Editor is null) return default;
-        var size = RenderedSize();
-        var fitted = Fit(size.Width, size.Height);
+        var fitted = GetImageFittedBounds();
         var sourceBounds = new CapturePixelRect(0, 0, Editor.Document.SourceSize.Width, Editor.Document.SourceSize.Height);
         var crop = Editor.Document.Layers.OfType<Wocel.Capture.Editor.CropLayer>().LastOrDefault()?.CropBounds ?? sourceBounds;
 
@@ -363,8 +362,21 @@ public sealed class EditorCanvas : Control
             context.FillRectangle(scrimBrush, new Rect(cropRect.Right, cropRect.Y, Math.Max(0, fitted.Right - cropRect.Right), cropRect.Height));
     }
 
-    private CapturePixelSize RenderedSize() => Editor!.Document.Layers.OfType<Wocel.Capture.Editor.ResizeLayer>().LastOrDefault()?.OutputSize
-        ?? Editor.Document.SourceSize;
+    private CapturePixelSize RenderedSize()
+    {
+        if (Editor is null) return default;
+        if (Editor.Document.Layers.OfType<Wocel.Capture.Editor.ResizeLayer>().LastOrDefault()?.OutputSize is { } resize)
+            return resize;
+        var sourceBounds = new CapturePixelRect(0, 0, Editor.Document.SourceSize.Width, Editor.Document.SourceSize.Height);
+        var crop = Editor.Document.Layers.OfType<Wocel.Capture.Editor.CropLayer>().LastOrDefault()?.CropBounds ?? sourceBounds;
+        return new CapturePixelSize(Math.Max(1, crop.Width), Math.Max(1, crop.Height));
+    }
+
+    private Rect GetImageFittedBounds()
+    {
+        var size = RenderedSize();
+        return Fit(size.Width, size.Height);
+    }
 
     private Rect Fit(int width, int height)
     {

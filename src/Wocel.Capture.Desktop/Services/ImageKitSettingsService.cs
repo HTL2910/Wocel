@@ -11,6 +11,18 @@ public sealed class ImageKitSettings
     public string PrivateApiKey { get; set; } = string.Empty;
     public string Folder { get; set; } = "/wocel-captures";
     public bool AutoUpload { get; set; } = false;
+    public string LocalSaveDirectory { get; set; } = string.Empty;
+
+    public string GetEffectiveLocalSaveDirectory()
+    {
+        if (!string.IsNullOrWhiteSpace(LocalSaveDirectory) && Directory.Exists(LocalSaveDirectory))
+        {
+            return LocalSaveDirectory;
+        }
+        var defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "WocelCaptures");
+        Directory.CreateDirectory(defaultDir);
+        return defaultDir;
+    }
 
     public bool IsConfigured =>
         !string.IsNullOrWhiteSpace(UrlEndpoint) &&

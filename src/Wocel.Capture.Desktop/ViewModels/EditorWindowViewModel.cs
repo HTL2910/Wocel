@@ -9,9 +9,23 @@ namespace Wocel.Capture.Desktop.ViewModels;
 
 public sealed class EditorWindowViewModel : INotifyPropertyChanged
 {
-    private static readonly ShapeStyle DefaultStyle = new(EditorColor.FromHex("#EA580C"), 3, null, 1);
+    private string _currentColorHex = "#EA580C";
     private static readonly ShapeStyle HighlightStyle = new(EditorColor.FromHex("#FDE047"), 14, null, .45);
     private EditorTool _selectedTool = EditorTool.Arrow;
+
+    public string CurrentColorHex
+    {
+        get => _currentColorHex;
+        set
+        {
+            if (Set(ref _currentColorHex, value))
+            {
+                OnPropertyChanged(nameof(ActiveShapeStyle));
+            }
+        }
+    }
+
+    public ShapeStyle ActiveShapeStyle => new(EditorColor.FromHex(_currentColorHex), 3, null, 1);
     private Guid? _selectedLayerId;
     private bool _isExportBusy;
 
@@ -52,19 +66,22 @@ public sealed class EditorWindowViewModel : INotifyPropertyChanged
         if (points.Count < 2) return;
         EditorLayer layer = tool switch
         {
-            EditorTool.Pen => new FreehandLayer(Guid.NewGuid(), [.. points], DefaultStyle),
+            EditorTool.Pen => new FreehandLayer(Guid.NewGuid(), [.. points], ActiveShapeStyle),
             EditorTool.Highlight => HighlightLayer.Create([.. points], HighlightStyle),
             _ => throw new ArgumentOutOfRangeException(nameof(tool), "Tool is not a stroke tool.")
         };
         Execute(new AddLayerCommand(layer), layer.Id);
     }
 
-    public void AddText(PixelRect bounds, string text, string? hexColor = null, double fontSize = 18)
+    public void AddText(PixelRect bounds, string text, string? hexColor = null, double fontSize = 20)
     {
-        var style = !string.IsNullOrWhiteSpace(hexColor)
-            ? new ShapeStyle(EditorColor.FromHex(hexColor), 3, null, 1)
-            : DefaultStyle;
-        Add(new TextLayer(Guid.NewGuid(), bounds, text, style, Math.Max(10, fontSize)));
+        var color = !string.IsNullOrWhiteSpace(hexColor) ? hexColor : _currentColorHex;
+        var style = new ShapeStyle(EditorColor.FromHex(color), 3, null, 1);
+        var size = Math.Max(10, fontSize);
+        var estWidth = Math.Max(bounds.Width, (int)Math.Ceiling(text.Length * size * 0.75) + 24);
+        var estHeight = Math.Max(bounds.Height, (int)Math.Ceiling(size * 1.5) + 12);
+        var adjustedBounds = new PixelRect(bounds.X, bounds.Y, estWidth, estHeight);
+        Add(new TextLayer(Guid.NewGuid(), adjustedBounds, text, style, size));
     }
 
     public void AddBlur(PixelRect bounds, double radius) =>
@@ -81,7 +98,7 @@ public sealed class EditorWindowViewModel : INotifyPropertyChanged
             EditorTool.Triangle => EditorLayerKind.Triangle,
             _ => throw new ArgumentOutOfRangeException(nameof(tool), "Tool is not a 2D shape.")
         };
-        Add(new ShapeLayer(Guid.NewGuid(), kind, PixelRect.FromPoints(start, end), DefaultStyle, start, end));
+        Add(new ShapeLayer(Guid.NewGuid(), kind, PixelRect.FromPoints(start, end), ActiveShapeStyle, start, end));
     }
 
     public void ApplyCrop(PixelRect bounds) => Add(new CropLayer(Guid.NewGuid(), bounds));

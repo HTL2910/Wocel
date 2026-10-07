@@ -31,8 +31,8 @@ public sealed class AppComposition : IDisposable
         viewModel = new MainWindowViewModel(
             capture: () => CaptureRequested?.Invoke(this, EventArgs.Empty),
             showHistory: () => viewModel!.SelectedTabIndex = 0,
-            showLog: () => viewModel!.SelectedTabIndex = 1,
-            showSettings: () => viewModel!.SelectedTabIndex = 2,
+            showLog: () => viewModel!.SelectedTabIndex = 0,
+            showSettings: () => viewModel!.SelectedTabIndex = viewModel.SelectedTabIndex == 1 ? 0 : 1,
             signIn: async () =>
             {
                 if (viewModel == null) return;

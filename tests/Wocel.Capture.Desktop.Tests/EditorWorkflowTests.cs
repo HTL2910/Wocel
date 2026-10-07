@@ -86,5 +86,25 @@ public sealed class EditorWorkflowTests
         Assert.Equal(viewModel.Revision, viewModel.ExportedRevision);
     }
 
+    [Fact]
+    public void Unified_color_updates_new_shapes_strokes_and_text()
+    {
+        var viewModel = Create();
+        viewModel.CurrentColorHex = "#10B981";
+
+        viewModel.AddShape(EditorTool.Rectangle, new PixelPoint(5, 5), new PixelPoint(25, 25));
+        viewModel.AddStroke(EditorTool.Pen, [new(2, 2), new(10, 10)]);
+        viewModel.AddText(new PixelRect(10, 10, 50, 20), "Hello", fontSize: 20);
+
+        var rectLayer = Assert.IsType<ShapeLayer>(viewModel.Document.Layers[0]);
+        var penLayer = Assert.IsType<FreehandLayer>(viewModel.Document.Layers[1]);
+        var textLayer = Assert.IsType<TextLayer>(viewModel.Document.Layers[2]);
+
+        Assert.Equal(EditorColor.FromHex("#10B981"), rectLayer.Style.Stroke);
+        Assert.Equal(EditorColor.FromHex("#10B981"), penLayer.Style.Stroke);
+        Assert.Equal(EditorColor.FromHex("#10B981"), textLayer.Style.Stroke);
+        Assert.Equal(20, textLayer.FontSize);
+    }
+
     private static EditorWindowViewModel Create() => new(new EditorDocument(new PixelSize(100, 80)), autoUploadDefault: false);
 }

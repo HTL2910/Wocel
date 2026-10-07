@@ -19,8 +19,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     {
         CaptureCommand = new DelegateCommand(capture ?? (() => { }));
         ShowHistoryCommand = new DelegateCommand(showHistory ?? (() => SelectedTabIndex = 0));
-        ShowLogCommand = new DelegateCommand(showLog ?? (() => SelectedTabIndex = 1));
-        ShowSettingsCommand = new DelegateCommand(showSettings ?? (() => SelectedTabIndex = 2));
+        ShowLogCommand = new DelegateCommand(showLog ?? (() => SelectedTabIndex = 0));
+        ShowSettingsCommand = new DelegateCommand(showSettings ?? (() => SelectedTabIndex = SelectedTabIndex == 1 ? 0 : 1));
         SignInCommand = new DelegateCommand(signIn ?? (() => { }));
     }
 

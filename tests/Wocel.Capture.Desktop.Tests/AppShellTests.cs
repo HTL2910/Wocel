@@ -12,14 +12,15 @@ namespace Wocel.Capture.Desktop.Tests;
 public sealed class AppShellTests
 {
     [AvaloniaFact]
-    public void Main_window_exposes_history_log_and_settings_tabs()
+    public void Main_window_exposes_capture_and_settings_views()
     {
         var window = CreateWindow();
         var tabNames = window.GetVisualDescendants().OfType<TabItem>().Select(item => item.Header?.ToString()).ToArray();
 
-        Assert.Contains("History", tabNames);
-        Assert.Contains("Log", tabNames);
+        Assert.Contains("Capture", tabNames);
         Assert.Contains("Settings", tabNames);
+        Assert.DoesNotContain("History", tabNames);
+        Assert.DoesNotContain("Log", tabNames);
     }
 
     [AvaloniaFact]
