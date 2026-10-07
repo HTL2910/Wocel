@@ -1,0 +1,82 @@
+<Window x:Class="Wocel.Capture.Windows.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Wocel Capture" Width="1040" Height="720" MinWidth="800" MinHeight="560"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="24">
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <DockPanel>
+      <StackPanel DockPanel.Dock="Left">
+        <TextBlock FontSize="26" FontWeight="SemiBold" Text="Wocel Capture" />
+        <TextBlock Margin="0,4,0,0" Foreground="{StaticResource MutedForegroundBrush}" Text="Chụp, chú thích và chia sẻ qua Google Drive" />
+      </StackPanel>
+      <Button x:Name="CaptureButton" DockPanel.Dock="Right" HorizontalAlignment="Right" Background="{StaticResource PrimaryBrush}" Foreground="White" FontWeight="SemiBold" Content="Chụp vùng  (Print Screen)" Click="OnCaptureClick" AutomationProperties.Name="Chụp vùng màn hình" />
+    </DockPanel>
+    <TabControl x:Name="MainTabs" Grid.Row="1" Margin="0,24,0,12" SelectionChanged="OnTabChanged">
+      <TabItem Header="Lịch sử">
+        <Grid Margin="14">
+          <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+          <DockPanel Margin="0,0,0,10">
+            <ComboBox x:Name="HistoryStatePicker" DockPanel.Dock="Right" Width="150" SelectedIndex="0" SelectionChanged="OnHistoryFilterChanged">
+              <ComboBoxItem Content="Tất cả" Tag="All"/><ComboBoxItem Content="Đã upload" Tag="Uploaded"/>
+              <ComboBoxItem Content="Chưa upload" Tag="NotUploaded"/><ComboBoxItem Content="Upload lỗi" Tag="Failed"/>
+            </ComboBox>
+            <TextBox x:Name="HistorySearch" Margin="0,0,12,0" Padding="9,7" TextChanged="OnHistoryFilterChanged" AutomationProperties.Name="Tìm trong lịch sử" ToolTip="Tìm theo tên ảnh" />
+          </DockPanel>
+          <DataGrid x:Name="HistoryGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Tên ảnh" Binding="{Binding DisplayName}" Width="*" />
+              <DataGridTextColumn Header="Thời gian" Binding="{Binding CreatedAt, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}" Width="165" />
+              <DataGridTextColumn Header="Kích thước" Binding="{Binding Size}" Width="135" />
+              <DataGridTextColumn Header="Trạng thái" Binding="{Binding UploadState}" Width="155" />
+              <DataGridTextColumn Header="Lỗi" Binding="{Binding LastErrorCode}" Width="130" />
+            </DataGrid.Columns>
+          </DataGrid>
+          <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Mở ảnh" Click="OnOpenHistory" />
+            <Button Content="Copy link" Click="OnCopyHistoryLink" />
+            <Button Content="Thử upload lại" Click="OnRetryHistory" />
+            <Button Content="Xóa khỏi lịch sử" Foreground="#B91C1C" Click="OnDeleteHistory" />
+          </WrapPanel>
+        </Grid>
+      </TabItem>
+      <TabItem Header="Nhật ký">
+        <Grid Margin="14">
+          <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+          <TextBox x:Name="LogSearch" Padding="9,7" Margin="0,0,0,10" TextChanged="OnLogFilterChanged" AutomationProperties.Name="Tìm nhật ký" ToolTip="Tìm theo thao tác hoặc mã lỗi" />
+          <DataGrid x:Name="LogGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Thời gian" Binding="{Binding Timestamp, StringFormat={}{0:dd/MM/yyyy HH:mm:ss}}" Width="165" />
+              <DataGridTextColumn Header="Thao tác" Binding="{Binding EventName}" Width="180" />
+              <DataGridTextColumn Header="Mức" Binding="{Binding Level}" Width="100" />
+              <DataGridTextColumn Header="Thời lượng" Binding="{Binding DurationMs, StringFormat={}{0} ms}" Width="100" />
+              <DataGridTextColumn Header="Mã lỗi" Binding="{Binding ErrorCode}" Width="130" />
+              <DataGridTextColumn Header="Chi tiết an toàn" Binding="{Binding Message}" Width="*" />
+            </DataGrid.Columns>
+          </DataGrid>
+          <Button Grid.Row="2" HorizontalAlignment="Right" Margin="0,10,0,0" Content="Copy chi tiết" Click="OnCopyLog" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Cài đặt">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+          <StackPanel Margin="20" MaxWidth="620" HorizontalAlignment="Left">
+            <TextBlock FontSize="20" FontWeight="SemiBold" Text="Cài đặt chụp" />
+            <TextBlock Margin="0,18,0,4" FontWeight="SemiBold" Text="Phím tắt toàn cục" />
+            <TextBox x:Name="HotkeyText" Padding="9,7" AutomationProperties.Name="Phím tắt toàn cục" />
+            <TextBlock Margin="0,4,0,0" Foreground="{StaticResource MutedForegroundBrush}" Text="Ví dụ: PrintScreen, Ctrl+Shift+S hoặc Alt+F12. Áp dụng ngay khi lưu." />
+            <TextBlock Margin="0,18,0,4" FontWeight="SemiBold" Text="Thư mục lưu mặc định" />
+            <TextBox x:Name="FolderText" Padding="9,7" AutomationProperties.Name="Thư mục lưu mặc định" />
+            <CheckBox x:Name="AutoUploadCheck" Margin="0,18,0,0" Content="Tự động upload và tạo link công khai (ai có link đều xem được)" />
+            <CheckBox x:Name="LaunchAtSignInCheck" Margin="0,12,0,0" Content="Tự chạy khi đăng nhập Windows" />
+            <Separator Margin="0,22,0,16" />
+            <TextBlock FontSize="20" FontWeight="SemiBold" Text="Google Drive" />
+            <TextBlock x:Name="GoogleStatusText" Margin="0,8,0,8" Text="Chưa đăng nhập" />
+            <WrapPanel><Button x:Name="GoogleSignInButton" Content="Đăng nhập Google" Click="OnGoogleSignIn" /><Button x:Name="GoogleSignOutButton" Content="Đăng xuất" IsEnabled="False" Click="OnGoogleSignOut" /></WrapPanel>
+            <Button Margin="0,24,0,0" HorizontalAlignment="Left" Background="{StaticResource PrimaryBrush}" Foreground="White" Content="Lưu cài đặt" Click="OnSaveSettings" />
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+    <TextBlock x:Name="StatusText" Grid.Row="2" Foreground="{StaticResource MutedForegroundBrush}" Text="Sẵn sàng" />
+  </Grid>
+</Window>

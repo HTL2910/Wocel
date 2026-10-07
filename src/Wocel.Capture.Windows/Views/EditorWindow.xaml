@@ -1,0 +1,65 @@
+<Window x:Class="Wocel.Capture.Windows.Views.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Chỉnh sửa ảnh — Wocel Capture" Width="1180" Height="820" MinWidth="860" MinHeight="620"
+        WindowStartupLocation="CenterOwner" Closing="OnClosing">
+  <Window.InputBindings>
+    <KeyBinding Key="Z" Modifiers="Ctrl" Command="ApplicationCommands.Undo" />
+    <KeyBinding Key="Y" Modifiers="Ctrl" Command="ApplicationCommands.Redo" />
+  </Window.InputBindings>
+  <DockPanel>
+    <Border DockPanel.Dock="Top" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="10,8">
+      <StackPanel>
+        <WrapPanel x:Name="ToolPanel">
+          <Button Content="Chọn/di chuyển" Tag="Select" Click="OnToolClick" AutomationProperties.Name="Chọn và di chuyển chú thích" />
+          <Button Content="Cắt" Tag="Crop" Click="OnToolClick" AutomationProperties.Name="Công cụ cắt ảnh" />
+          <Button Content="Bút" Tag="Pen" Click="OnToolClick" />
+          <Button Content="Highlight" Tag="Highlight" Click="OnToolClick" />
+          <Button Content="Chữ" Tag="Text" Click="OnToolClick" />
+          <Button Content="Làm mờ" Tag="Blur" Click="OnToolClick" />
+          <Separator Width="12" />
+          <Button Content="Đường" Tag="Line" Click="OnToolClick" />
+          <Button Content="Mũi tên" Tag="Arrow" Click="OnToolClick" />
+          <Button Content="Chữ nhật" Tag="Rectangle" Click="OnToolClick" />
+          <Button Content="Ellipse" Tag="Ellipse" Click="OnToolClick" />
+          <Button Content="Tam giác" Tag="Triangle" Click="OnToolClick" />
+          <Button Content="Resize 75%" Click="OnResizeClick" ToolTip="Đổi kích thước đầu ra còn 75%" />
+        </WrapPanel>
+        <WrapPanel Margin="4,4,0,0" VerticalAlignment="Center">
+          <TextBlock VerticalAlignment="Center" Text="Màu" />
+          <ComboBox x:Name="ColorPicker" Width="110" Margin="8,0,16,0" SelectedIndex="0">
+            <ComboBoxItem Content="Đỏ" Tag="#EF4444" /><ComboBoxItem Content="Vàng" Tag="#F59E0B" />
+            <ComboBoxItem Content="Xanh ngọc" Tag="#0D9488" /><ComboBoxItem Content="Xanh dương" Tag="#2563EB" />
+            <ComboBoxItem Content="Đen" Tag="#111827" /><ComboBoxItem Content="Trắng" Tag="#FFFFFF" />
+          </ComboBox>
+          <TextBlock VerticalAlignment="Center" Text="Nét" />
+          <Slider x:Name="StrokeSlider" Width="100" Margin="8,0,16,0" Minimum="1" Maximum="24" Value="4" TickFrequency="1" IsSnapToTickEnabled="True" />
+          <TextBlock VerticalAlignment="Center" Text="Độ trong" />
+          <Slider x:Name="OpacitySlider" Width="100" Margin="8,0,16,0" Minimum="0.1" Maximum="1" Value="1" />
+          <Button Content="Hoàn tác" Command="ApplicationCommands.Undo" />
+          <Button Content="Làm lại" Command="ApplicationCommands.Redo" />
+          <Button Content="Xóa layer" Click="OnDeleteLayerClick" ToolTip="Xóa chú thích đang chọn" />
+          <Button Content="Reset" Click="OnResetClick" />
+        </WrapPanel>
+      </StackPanel>
+    </Border>
+    <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" Padding="10">
+      <DockPanel>
+        <TextBlock x:Name="EditorStatus" VerticalAlignment="Center" Foreground="{StaticResource MutedForegroundBrush}" Text="Kéo trên ảnh để vẽ." />
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+          <CheckBox x:Name="UploadCheck" VerticalAlignment="Center" Margin="8" Content="Upload và tạo link công khai" ToolTip="Bất kỳ ai có link đều có thể xem ảnh" />
+          <Button Content="Copy" Click="OnCopyClick" />
+          <Button Content="Lưu..." Click="OnSaveClick" />
+          <Button x:Name="UploadButton" Content="Upload &amp; Copy Link" Click="OnUploadClick" />
+          <Button Content="Đóng" Click="OnCloseClick" />
+        </StackPanel>
+      </DockPanel>
+    </Border>
+    <ScrollViewer Background="#111827" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="False">
+      <Border Margin="24" Background="#1F2937" Padding="1">
+        <Image x:Name="EditorImage" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"
+               MouseLeftButtonDown="OnCanvasMouseDown" MouseMove="OnCanvasMouseMove" MouseLeftButtonUp="OnCanvasMouseUp" />
+      </Border>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Wocel.Capture</RootNamespace>
+    <AssemblyName>Wocel.Capture.Core</AssemblyName>
+    <Product>Wocel Capture</Product>
+    <Description>Portable domain model for Wocel Capture.</Description>
+  </PropertyGroup>
+</Project>
