@@ -1,0 +1,18 @@
+<Project>
+  <!-- Thông tin phiên bản dùng chung cho mọi project trong Wocel Office -->
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+
+    <Product>Wocel Office</Product>
+    <Company>Wocel</Company>
+    <Authors>Wocel</Authors>
+    <Copyright>© 2026 Wocel</Copyright>
+    <Description>Bộ ứng dụng văn phòng ngoại tuyến: Excel, Word và 29 công cụ xử lý tệp PDF.</Description>
+
+    <NeutralLanguage>vi-VN</NeutralLanguage>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+</Project>
