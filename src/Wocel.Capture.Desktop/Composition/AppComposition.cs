@@ -1,4 +1,6 @@
+using Application = Avalonia.Application;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Wocel.Capture.Cloud;
 using Wocel.Capture.Desktop.Capture;
 using Wocel.Capture.Desktop.Services;
@@ -78,12 +80,20 @@ public sealed class AppComposition : IDisposable
 
     public MainWindow CreateMainWindow() => new() { DataContext = ViewModel };
 
+    // Thời gian chờ để Windows (DWM) chạy xong hiệu ứng ẩn và vẽ lại màn hình trước khi chụp.
+    private static readonly TimeSpan HideSettleDelay = TimeSpan.FromMilliseconds(350);
+    private bool _captureInProgress;
+
     public async Task StartCaptureFlowAsync(Window? ownerWindow)
     {
+        if (_captureInProgress) return;
+        _captureInProgress = true;
+        var hiddenWindows = new List<Window>();
         try
         {
             ViewModel.StatusText = "Đang chụp màn hình...";
-            ownerWindow?.Hide();
+            HideAppWindows(ownerWindow, hiddenWindows);
+            await Task.Delay(HideSettleDelay, ShutdownToken);
 
             var captureService = PlatformServices?.ScreenCapture ?? new DesktopScreenCaptureService();
             var frame = await captureService.CaptureVirtualDesktopAsync(ShutdownToken);
@@ -145,22 +155,48 @@ public sealed class AppComposition : IDisposable
                     ownerWindow?.Activate();
                     ViewModel.StatusText = "Sẵn sàng chụp (Ready)";
                 };
+                RestoreWindows(hiddenWindows, except: ownerWindow);
                 editor.Show();
                 editor.Activate();
             }
             else
             {
-                ownerWindow?.Show();
-                ownerWindow?.Activate();
+                RestoreWindows(hiddenWindows, except: null);
+                if (ownerWindow?.IsVisible == true) ownerWindow.Activate();
                 ViewModel.StatusText = "Đã hủy chụp.";
             }
         }
         catch (Exception ex)
         {
+            RestoreWindows(hiddenWindows, except: null);
             ownerWindow?.Show();
             ownerWindow?.Activate();
             ViewModel.StatusText = $"Lỗi chụp màn hình: {ex.Message}";
         }
+        finally
+        {
+            _captureInProgress = false;
+        }
+    }
+
+    /// <summary>Ẩn cửa sổ chính và mọi cửa sổ khác của app (kể cả Editor cũ) để không bị chụp vào ảnh.</summary>
+    private static void HideAppWindows(Window? ownerWindow, List<Window> hidden)
+    {
+        var windows = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+            ? desktop.Windows.ToList()
+            : [];
+        if (ownerWindow is not null && !windows.Contains(ownerWindow)) windows.Add(ownerWindow);
+        foreach (var window in windows.Where(w => w.IsVisible))
+        {
+            window.Hide();
+            hidden.Add(window);
+        }
+    }
+
+    private static void RestoreWindows(List<Window> hidden, Window? except)
+    {
+        foreach (var window in hidden.Where(w => w != except)) window.Show();
+        hidden.Clear();
     }
 
     public void Dispose()

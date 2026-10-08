@@ -15,15 +15,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.0" />
+    <PackageReference Include="Avalonia" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Wocel.Core\Wocel.Core.csproj" />
     <ProjectReference Include="..\Wocel.Word\Wocel.Word.csproj" />
     <ProjectReference Include="..\Wocel.Excel\Wocel.Excel.csproj" />
+    <!-- Wocel Capture chạy trong cùng exe: Program.Main rẽ nhánh theo tham số capture/background -->
+    <ProjectReference Include="..\Wocel.Capture.Desktop\Wocel.Capture.Desktop.csproj" />
   </ItemGroup>
+
+  <!-- Bản phát hành chỉ gồm một tệp exe: bỏ symbol native (SkiaSharp/HarfBuzz) và runtimeconfig
+       của Wocel.Capture.Desktop, vốn được chép theo vì project đó cũng là WinExe. -->
+  <Target Name="TrimNonRuntimePublishFiles" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+                             Condition="'%(Extension)' == '.pdb' or '%(Filename)%(Extension)' == 'Wocel.Capture.Desktop.runtimeconfig.json'" />
+    </ItemGroup>
+  </Target>
 </Project>

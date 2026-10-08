@@ -25,6 +25,7 @@ Thumbs.db
 # Bản build phát hành
 dist/
 outputs/
+[Oo]utput/
 
 # Generated tool artifacts and agent scratch state
 tools/Wocel.IconBuilder/output/

@@ -46,11 +46,11 @@ public class ShortcutTests
 
         grid.SelectCell(1, 1);
         foreach (char c in "123") window.KeyTextInput(c.ToString());
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Assert.Equal("123", sheet.GetCell("A1").GetDisplayString());
 
         grid.Focus();
-        window.KeyPress(Key.Z, RawInputModifiers.Control);
+        window.KeyPress(Key.Z, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
 
         Assert.Equal(string.Empty, sheet.GetCell("A1").GetDisplayString());
@@ -65,14 +65,14 @@ public class ShortcutTests
 
         grid.SelectCell(1, 1);
         foreach (char c in "xin chao") window.KeyTextInput(c.ToString());
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         grid.Focus();
-        window.KeyPress(Key.Z, RawInputModifiers.Control);
+        window.KeyPress(Key.Z, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
         Assert.Equal(string.Empty, sheet.GetCell("A1").GetDisplayString());
 
-        window.KeyPress(Key.Y, RawInputModifiers.Control);
+        window.KeyPress(Key.Y, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
         Assert.Equal("xin chao", sheet.GetCell("A1").GetDisplayString());
     }
@@ -93,7 +93,7 @@ public class ShortcutTests
         Assert.True(sheet.GetCell("B2").Style?.IsBold);
 
         grid.Focus();
-        window.KeyPress(Key.Z, RawInputModifiers.Control);
+        window.KeyPress(Key.Z, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
 
         Assert.True(sheet.GetCell("B2").Style?.IsBold != true);
@@ -112,7 +112,7 @@ public class ShortcutTests
         Dispatcher.UIThread.RunJobs();
         Assert.Contains("abc", document.ToPlainText());
 
-        window.KeyPress(Key.Z, RawInputModifiers.Control);
+        window.KeyPress(Key.Z, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
 
         Assert.DoesNotContain("abc", document.ToPlainText());
@@ -134,7 +134,7 @@ public class ShortcutTests
         Assert.Contains(document.Blocks[0].Inlines, r => r.IsBold);
 
         editor.Focus();
-        window.KeyPress(Key.Z, RawInputModifiers.Control);
+        window.KeyPress(Key.Z, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
 
         Assert.DoesNotContain(document.Blocks[0].Inlines, r => r.IsBold);
@@ -153,9 +153,9 @@ public class ShortcutTests
         editor.PasteRequested += () => pasted = true;
 
         editor.Focus();
-        window.KeyPress(Key.C, RawInputModifiers.Control);
-        window.KeyPress(Key.X, RawInputModifiers.Control);
-        window.KeyPress(Key.V, RawInputModifiers.Control);
+        window.KeyPress(Key.C, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.X, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.V, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.True(copied, "Ctrl+C trong trình soạn thảo văn bản chưa được xử lý.");
         Assert.True(cut, "Ctrl+X trong trình soạn thảo văn bản chưa được xử lý.");
@@ -174,7 +174,7 @@ public class ShortcutTests
         editor.SetCaret(0, 8, extend: true);
 
         editor.Focus();
-        window.KeyPress(Key.X, RawInputModifiers.Control);
+        window.KeyPress(Key.X, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
 
         Assert.Equal("phần này", document.ToPlainText().Trim());
@@ -192,7 +192,7 @@ public class ShortcutTests
         Dispatcher.UIThread.RunJobs();
         Assert.Equal(2, vm.Tabs.Count);
 
-        window.KeyPress(Key.W, RawInputModifiers.Control);
+        window.KeyPress(Key.W, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
 
         Assert.Single(vm.Tabs);

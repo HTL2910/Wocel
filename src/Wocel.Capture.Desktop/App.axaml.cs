@@ -24,7 +24,9 @@ public sealed partial class App : Application
             if (_composition.PlatformServices?.SingleInstance.IsPrimary == false)
             {
                 _composition.PlatformServices.SingleInstance.NotifyPrimary();
-                desktop.Shutdown();
+                _composition.Dispose();
+                // Avalonia 12 ném lỗi nếu Shutdown trước khi vòng lặp chính chạy, nên hoãn qua dispatcher.
+                Dispatcher.UIThread.Post(() => desktop.Shutdown());
                 return;
             }
             var window = _composition.CreateMainWindow();

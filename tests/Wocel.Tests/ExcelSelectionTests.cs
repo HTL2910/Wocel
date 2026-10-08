@@ -58,9 +58,9 @@ public class ExcelSelectionTests
         var (window, grid) = CreateGrid();
         grid.SelectCell(3, 3);
 
-        window.KeyPress(Key.Down, RawInputModifiers.Shift);
-        window.KeyPress(Key.Down, RawInputModifiers.Shift);
-        window.KeyPress(Key.Right, RawInputModifiers.Shift);
+        window.KeyPress(Key.Down, RawInputModifiers.Shift, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.Down, RawInputModifiers.Shift, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.Right, RawInputModifiers.Shift, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal(6, grid.SelectedCellCount);      // 3 dòng × 2 cột
         Assert.Equal("C3:D5", grid.ActiveRange.ToRangeAddress());
@@ -72,10 +72,10 @@ public class ExcelSelectionTests
         var (window, grid) = CreateGrid();
         grid.SelectCell(2, 2);
 
-        window.KeyPress(Key.Down, RawInputModifiers.Shift);
+        window.KeyPress(Key.Down, RawInputModifiers.Shift, Avalonia.Input.PhysicalKey.None, null);
         Assert.Equal(2, grid.SelectedCellCount);
 
-        window.KeyPress(Key.Down, RawInputModifiers.None);
+        window.KeyPress(Key.Down, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Assert.Equal(1, grid.SelectedCellCount);
     }
 
@@ -115,7 +115,7 @@ public class ExcelSelectionTests
         grid.TotalRows = 20;
         grid.TotalCols = 5;
 
-        window.KeyPress(Key.A, RawInputModifiers.Control);
+        window.KeyPress(Key.A, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal(100, grid.SelectedCellCount);
     }
@@ -183,7 +183,7 @@ public class ExcelSelectionTests
 
         Click(window, CellCenter(1, 1));
         Click(window, CellCenter(2, 2), RawInputModifiers.Shift);
-        window.KeyPress(Key.Delete, RawInputModifiers.None);
+        window.KeyPress(Key.Delete, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal(4, cleared.Count);
         Assert.Contains("A1", cleared);
@@ -229,9 +229,9 @@ public class ExcelSelectionTests
         grid.CutRequested += () => cut = true;
         grid.PasteRequested += () => pasted = true;
 
-        window.KeyPress(Key.C, RawInputModifiers.Control);
-        window.KeyPress(Key.X, RawInputModifiers.Control);
-        window.KeyPress(Key.V, RawInputModifiers.Control);
+        window.KeyPress(Key.C, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.X, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.V, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.True(copied && cut && pasted);
     }

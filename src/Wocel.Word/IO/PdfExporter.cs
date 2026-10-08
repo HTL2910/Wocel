@@ -10,7 +10,8 @@ public static class PdfExporter
     /// </summary>
     public static void ExportToPdf(DocumentDocument doc, Stream outputStream)
     {
-        using var writer = new StreamWriter(outputStream, Encoding.ASCII, leaveOpen: true);
+        // PDF xref offsets below assume 1-byte line endings; never use Environment.NewLine ("\r\n" on Windows).
+        using var writer = new StreamWriter(outputStream, Encoding.ASCII, leaveOpen: true) { NewLine = "\n" };
         var objects = new List<string>();
 
         // Object 1: Catalog

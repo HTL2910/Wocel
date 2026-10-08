@@ -46,7 +46,7 @@ public class FormulaSuggestionTests
         var (window, grid) = CreateGrid();
 
         Type(window, "=SU");
-        window.KeyPress(Key.Tab, RawInputModifiers.None);
+        window.KeyPress(Key.Tab, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("=SUM(", grid.EditorText);
         Assert.False(grid.Suggestions.IsOpen);
@@ -61,8 +61,8 @@ public class FormulaSuggestionTests
         Type(window, "=SU");
         var second = grid.Suggestions.Suggestions[1].Name;
 
-        window.KeyPress(Key.Down, RawInputModifiers.None);
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Down, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal($"={second}(", grid.EditorText);
     }
@@ -73,12 +73,12 @@ public class FormulaSuggestionTests
         var (window, grid) = CreateGrid();
 
         Type(window, "=SU");
-        window.KeyPress(Key.Escape, RawInputModifiers.None);
+        window.KeyPress(Key.Escape, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.False(grid.Suggestions.IsOpen);
         Assert.True(grid.IsEditing, "Esc lần đầu chỉ đóng gợi ý, chưa huỷ ô đang nhập.");
 
-        window.KeyPress(Key.Escape, RawInputModifiers.None);
+        window.KeyPress(Key.Escape, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Assert.False(grid.IsEditing, "Esc lần hai mới huỷ ô đang nhập.");
     }
 
@@ -103,7 +103,7 @@ public class FormulaSuggestionTests
         Assert.True(grid.Suggestions.IsOpen);
         Assert.Equal("AVERAGE", grid.Suggestions.SelectedFunction?.Name);
 
-        window.KeyPress(Key.Tab, RawInputModifiers.None);
+        window.KeyPress(Key.Tab, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Assert.Equal("=IF(A1>1,AVERAGE(", grid.EditorText);
     }
 
@@ -122,9 +122,9 @@ public class FormulaSuggestionTests
         window.MouseUp(new Avalonia.Point(200, 200), MouseButton.Left);
 
         Type(window, "=SU");
-        window.KeyPress(Key.Tab, RawInputModifiers.None);
+        window.KeyPress(Key.Tab, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Type(window, "A1:A2)");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("=SUM(A1:A2)", committed);
     }

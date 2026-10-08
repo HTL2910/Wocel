@@ -484,9 +484,7 @@ public partial class PdfToolsPanel : Border
 
     private void OnFileDrop(object? sender, DragEventArgs e)
     {
-        if (!e.Data.Contains(DataFormats.Files)) return;
-
-        var files = e.Data.GetFiles();
+        var files = e.DataTransfer.TryGetFiles();
         if (files == null) return;
 
         foreach (var file in files)

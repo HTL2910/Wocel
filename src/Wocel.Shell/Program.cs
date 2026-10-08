@@ -13,9 +13,24 @@ internal sealed class Program
             ?.Split('+')[0]
         ?? "1.0.0";
 
+    /// <summary>Tham số mở chế độ chụp màn hình. <c>--background</c> là tham số Capture tự ghi vào mục khởi động cùng Windows.</summary>
+    internal const string CaptureArgument = "--capture";
+
     [STAThread]
     public static void Main(string[] args)
     {
+        if (args.Any(a => a.Equals(CaptureArgument, StringComparison.OrdinalIgnoreCase)
+                       || a.Equals("--background", StringComparison.OrdinalIgnoreCase)))
+        {
+            // Mỗi process chỉ chạy được một Application Avalonia, nên Capture là một process riêng của cùng exe.
+            AppBuilder.Configure<Wocel.Capture.Desktop.App>()
+                .UsePlatformDetect()
+                .WithInterFont()
+                .LogToTrace()
+                .StartWithClassicDesktopLifetime(args);
+            return;
+        }
+
         ActivityLog.Start(Version);
 
         AppDomain.CurrentDomain.UnhandledException += (s, e) =>

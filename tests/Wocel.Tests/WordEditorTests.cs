@@ -56,7 +56,7 @@ public class WordEditorTests
         var (window, _, doc) = CreateEditor();
 
         Type(window, "Dòng một");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Type(window, "Dòng hai");
 
         Assert.Equal(2, doc.Blocks.Count);
@@ -70,7 +70,7 @@ public class WordEditorTests
         var (window, _, doc) = CreateEditor();
 
         Type(window, "abcd");
-        window.KeyPress(Key.Back, RawInputModifiers.None);
+        window.KeyPress(Key.Back, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("abc", doc.Blocks[0].Inlines[0].Text);
     }
@@ -285,9 +285,9 @@ public class WordEditorTests
         var (window, editor, _) = CreateEditor("abcdef");
 
         editor.SetCaret(0, 0, extend: false);
-        window.KeyPress(Key.Right, RawInputModifiers.Shift);
-        window.KeyPress(Key.Right, RawInputModifiers.Shift);
-        window.KeyPress(Key.Right, RawInputModifiers.Shift);
+        window.KeyPress(Key.Right, RawInputModifiers.Shift, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.Right, RawInputModifiers.Shift, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.Right, RawInputModifiers.Shift, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.True(editor.HasSelection);
         Assert.Equal("abc", editor.SelectedText);
@@ -298,7 +298,7 @@ public class WordEditorTests
     {
         var (window, editor, _) = CreateEditor("dòng 1\ndòng 2");
 
-        window.KeyPress(Key.A, RawInputModifiers.Control);
+        window.KeyPress(Key.A, RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.True(editor.HasSelection);
         Assert.Contains("dòng 1", editor.SelectedText);

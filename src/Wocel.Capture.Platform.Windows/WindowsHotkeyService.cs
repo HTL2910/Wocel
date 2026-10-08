@@ -98,9 +98,10 @@ public sealed partial class WindowsHotkeyService : IGlobalHotkeyService
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool UnregisterHotKey(nint window, int id);
-    [LibraryImport("user32.dll")]
+    // LibraryImport không tự thêm hậu tố A/W như DllImport: user32 chỉ export GetMessageW / PostThreadMessageW.
+    [LibraryImport("user32.dll", EntryPoint = "GetMessageW")]
     private static partial int GetMessage(out NativeMessage message, nint window, uint minimum, uint maximum);
-    [LibraryImport("user32.dll")]
+    [LibraryImport("user32.dll", EntryPoint = "PostThreadMessageW")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool PostThreadMessage(uint threadId, uint message, nuint wParam, nint lParam);
     [LibraryImport("kernel32.dll")]

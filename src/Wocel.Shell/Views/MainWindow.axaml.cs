@@ -6,6 +6,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using Avalonia.Input.Platform;
 using System;
 using System.IO;
 using System.Linq;
@@ -83,6 +84,8 @@ public partial class MainWindow : Window
             ShowPdfTools(true);
         };
         BtnTogglePdfTools.Click += (s, e) => ShowPdfTools(!_pdfToolsVisible);
+        BtnOpenCapture.Click += (s, e) => OpenCapture();
+        BtnOpenCaptureHub.Click += (s, e) => OpenCapture();
 
         // ─── Về trang chủ ────────────────────
         BtnBackToHome.Click += (s, e) => { ViewModel?.ShowWelcomeScreen(); ShowPdfTools(false); RenderRecentFiles(); };
@@ -593,6 +596,7 @@ public partial class MainWindow : Window
         Tip(BtnNewWordDoc, "Tài liệu mới", "Tạo tài liệu văn bản trống khổ A4.");
         Tip(BtnBrowseFileFromDisk, "Mở tệp", "Mở .xlsx, .csv, .docx, .rtf, .txt, .pdf hoặc .wocel.", $"{ctrl}O");
         Tip(BtnOpenPdfToolsHub, "Bộ công cụ xử lý tệp", "29 công cụ PDF, ảnh và bảng tính, chạy ngoại tuyến trên máy bạn.");
+        Tip(BtnOpenCaptureHub, "Wocel Capture", "Mở công cụ chụp ảnh màn hình (chạy nền ở khay hệ thống).");
 
         // ── Thanh lệnh nhanh ─────────────────
         Tip(BtnBackToHome, "Trang chủ", "Quay về màn hình chào. Các thẻ đang mở vẫn được giữ.");
@@ -603,6 +607,7 @@ public partial class MainWindow : Window
         Tip(BtnAddExcelTab, "Thêm bảng tính", "Mở thêm một sổ tính trong thẻ mới.");
         Tip(BtnAddWordTab, "Thêm tài liệu", "Mở thêm một tài liệu văn bản trong thẻ mới.");
         Tip(BtnTogglePdfTools, "Bộ công cụ tệp", "Bật/tắt bảng công cụ xử lý PDF, ảnh và bảng tính.");
+        Tip(BtnOpenCapture, "Wocel Capture", "Mở công cụ chụp ảnh màn hình (chạy nền ở khay hệ thống).");
 
         // ── Thẻ ribbon ───────────────────────
         Tip(BtnTabFile, "Tệp", "Tạo mới, mở, lưu, đóng thẻ và mở bộ công cụ tệp.");
@@ -1000,14 +1005,14 @@ public partial class MainWindow : Window
     {
         if (ViewModel?.ActiveTab?.ModuleType == OfficeModuleType.Word)
         {
-            var clip = await Clipboard!.GetTextAsync() ?? string.Empty;
+            var clip = await Clipboard!.TryGetTextAsync() ?? string.Empty;
             if (clip.Length > 0) WordDocumentEditor.InsertText(clip);
             return;
         }
 
         if (ViewModel?.ActiveTab?.Session is not ExcelDocumentSession session) return;
 
-        var text = await Clipboard!.GetTextAsync() ?? string.Empty;
+        var text = await Clipboard!.TryGetTextAsync() ?? string.Empty;
         if (text.Length == 0) return;
 
         RecordUndoPoint();
@@ -2223,5 +2228,26 @@ public partial class MainWindow : Window
     private void ShowStatusMsg(string msg)
     {
         TxtStatusBar.Text = msg;
+    }
+
+    /// <summary>Mở Wocel Capture: chạy lại chính exe này ở chế độ chụp màn hình (process riêng).</summary>
+    private void OpenCapture()
+    {
+        try
+        {
+            var exe = Environment.ProcessPath
+                ?? throw new InvalidOperationException("Không xác định được đường dẫn ứng dụng.");
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(exe, Program.CaptureArgument)
+            {
+                UseShellExecute = false
+            });
+            ActivityLog.Info("ui", "open-capture");
+            ShowStatusMsg("Đã mở Wocel Capture.");
+        }
+        catch (Exception error)
+        {
+            ActivityLog.Error("ui", "open-capture", error);
+            ShowStatusMsg($"Không mở được Wocel Capture: {error.Message}");
+        }
     }
 }

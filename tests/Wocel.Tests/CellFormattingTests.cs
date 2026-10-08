@@ -197,7 +197,7 @@ public class CellFormattingTests
         Assert.Equal(24, sheet.GetCell("A1").Style?.FontSize);
 
         grid.Focus();
-        window.KeyPress(Avalonia.Input.Key.Z, Avalonia.Input.RawInputModifiers.Control);
+        window.KeyPress(Avalonia.Input.Key.Z, Avalonia.Input.RawInputModifiers.Control, Avalonia.Input.PhysicalKey.None, null);
         Dispatcher.UIThread.RunJobs();
 
         Assert.True(sheet.GetCell("A1").Style?.FontSize is null or 12);

@@ -1,6 +1,6 @@
 # Wocel Office 1.0
 
-Bộ ứng dụng văn phòng chạy trên máy tính (Avalonia + .NET 10): **Excel**, **Word**, **trình xem PDF**
+Bộ ứng dụng văn phòng chạy trên máy tính (Avalonia 12 + .NET 10): **Excel**, **Word**, **trình xem PDF**
 và **bộ công cụ xử lý tệp 29 chức năng** theo phong cách Smallpdf.
 
 Toàn bộ phần xử lý PDF do Wocel tự viết trong `Wocel.Core` — **không dùng thư viện PDF bên ngoài**,
@@ -190,8 +190,8 @@ dotnet test tests/Wocel.Tests/Wocel.Tests.csproj
 ./scripts/build-release.sh win-x64      # hoặc chỉ định rõ nền tảng
 ```
 
-**Windows** ra đúng **một tệp** `dist/win-x64/Wocel Office.exe` (~46 MB) — mọi thư viện
-đã gói sẵn bên trong, chép đi đâu cũng chạy, không cần cài .NET.
+**Windows** ra đúng **một tệp** `dist/win-x64/Wocel Office.exe` (~48 MB) — mọi thư viện
+đã gói sẵn bên trong, gồm cả **Wocel Capture**; chép đi đâu cũng chạy, không cần cài .NET.
 **macOS** ra `dist/Wocel Office.app` (đã ký ad-hoc).
 
 Muốn app đọc được cấu hình Supabase, đặt tệp `.env` cạnh tệp thực thi
@@ -203,15 +203,17 @@ Muốn app đọc được cấu hình Supabase, đặt tệp `.env` cạnh tệ
 src/Wocel.Core     Mô hình dữ liệu, nhân PDF, PdfToolkit, nhật ký hoạt động
 src/Wocel.Word     Đọc/ghi .docx, .rtf
 src/Wocel.Excel    Đọc/ghi .xlsx, .csv, công thức
-src/Wocel.Shell    Giao diện Avalonia (Excel grid, Word editor, PDF viewer, bộ công cụ tệp)
-tests/Wocel.Tests  224 test: nhân PDF, các công cụ, và dựng giao diện không màn hình
+src/Wocel.Shell    Giao diện Avalonia (Excel grid, Word editor, PDF viewer, bộ công cụ tệp) + điểm vào Wocel Capture
+tests/Wocel.Tests  224 test (xunit v3): nhân PDF, các công cụ, và dựng giao diện không màn hình
 ```
 
 ---
 
 ## Wocel Capture
 
-Repo có thêm ứng dụng Windows độc lập **Wocel Capture**:
+**Wocel Capture** (bản Avalonia `src/Wocel.Capture.Desktop`) nằm chung trong `Wocel Office.exe`. Mở bằng ô
+**📸 Chụp màn hình** ở trang chủ, nút cùng tên trên thanh tiêu đề, hoặc chạy `"Wocel Office.exe" --capture`.
+Capture chạy thành process riêng, chỉ một bản; tự khởi động cùng Windows thì dùng `--background`.
 
 - Chụp vùng bằng `Print Screen` hoặc nút trong app; chạy nền ở system tray.
 - Editor không phá hủy ảnh gốc: bút, highlight, chữ, làm mờ, crop, resize, đường thẳng, mũi tên, chữ nhật, ellipse và tam giác.

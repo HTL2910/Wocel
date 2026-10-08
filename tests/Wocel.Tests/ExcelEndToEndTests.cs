@@ -53,13 +53,13 @@ public class ExcelEndToEndTests
 
         grid.SelectCell(1, 1);
         Type(window, "10");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);   // A1 = 10, xuống A2
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);   // A1 = 10, xuống A2
 
         Type(window, "32");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);   // A2 = 32, xuống A3
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);   // A2 = 32, xuống A3
 
         Type(window, "=SUM(A1:A2)");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("10", Display(session, "A1"));
         Assert.Equal("32", Display(session, "A2"));
@@ -73,15 +73,15 @@ public class ExcelEndToEndTests
 
         grid.SelectCell(1, 1);
         Type(window, "8");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Type(window, "9");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         // Gõ =SU rồi Tab để chọn SUM từ danh sách gợi ý
         Type(window, "=SU");
-        window.KeyPress(Key.Tab, RawInputModifiers.None);
+        window.KeyPress(Key.Tab, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
         Type(window, "A1:A2)");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("17", Display(session, "A3"));
     }
@@ -93,13 +93,13 @@ public class ExcelEndToEndTests
 
         grid.SelectCell(1, 1);
         Type(window, "5");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         // "=SUM(A" — chữ A ở đây là ô A1, gõ Enter phải ghi công thức chứ
         // không được biến thành hàm ABS/AND từ danh sách gợi ý.
         grid.SelectCell(3, 1);
         Type(window, "=SUM(A1)");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("5", Display(session, "A3"));
     }
@@ -117,7 +117,7 @@ public class ExcelEndToEndTests
 
         grid.SelectCell(1, 1);
         Type(window, "25");
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("50", Display(session, "A2"));
     }

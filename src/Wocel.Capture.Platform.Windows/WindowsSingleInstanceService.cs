@@ -6,14 +6,16 @@ namespace Wocel.Capture.Platform.Windows;
 public sealed class WindowsSingleInstanceService : ISingleInstanceService
 {
     private readonly string _pipeName;
-    private readonly Mutex _mutex;
+    // Named event chứ không dùng Mutex: Mutex gắn với thread tạo ra nó nên Dispose từ thread khác sẽ lỗi.
+    // Event không có chủ sở hữu; tên được giải phóng khi handle cuối cùng đóng.
+    private readonly EventWaitHandle _instanceHandle;
     private readonly CancellationTokenSource _shutdown = new();
 
     public WindowsSingleInstanceService(string name = "Wocel.Capture.Desktop")
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         _pipeName = new string(name.Select(character => char.IsAsciiLetterOrDigit(character) ? character : '-').ToArray());
-        _mutex = new Mutex(true, name, out var created);
+        _instanceHandle = new EventWaitHandle(false, EventResetMode.ManualReset, name, out var created);
         IsPrimary = created;
         if (IsPrimary) _ = ListenAsync(_shutdown.Token);
     }
@@ -59,7 +61,6 @@ public sealed class WindowsSingleInstanceService : ISingleInstanceService
     {
         _shutdown.Cancel();
         _shutdown.Dispose();
-        if (IsPrimary) _mutex.ReleaseMutex();
-        _mutex.Dispose();
+        _instanceHandle.Dispose();
     }
 }

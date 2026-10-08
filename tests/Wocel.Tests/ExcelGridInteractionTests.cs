@@ -61,14 +61,14 @@ public class ExcelGridInteractionTests
         window.MouseDown(CellCenter(3, 3), MouseButton.Left);
         window.MouseUp(CellCenter(3, 3), MouseButton.Left);
 
-        window.KeyPress(Key.Down, RawInputModifiers.None);
-        window.KeyPress(Key.Right, RawInputModifiers.None);
+        window.KeyPress(Key.Down, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.Right, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal(4, grid.SelectedRow);
         Assert.Equal(4, grid.SelectedCol);
 
-        window.KeyPress(Key.Up, RawInputModifiers.None);
-        window.KeyPress(Key.Left, RawInputModifiers.None);
+        window.KeyPress(Key.Up, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
+        window.KeyPress(Key.Left, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal(3, grid.SelectedRow);
         Assert.Equal(3, grid.SelectedCol);
@@ -92,7 +92,7 @@ public class ExcelGridInteractionTests
 
         Assert.True(grid.IsEditing, "Gõ ký tự phải mở ô nhập liệu như Excel.");
 
-        window.KeyPress(Key.Enter, RawInputModifiers.None);
+        window.KeyPress(Key.Enter, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("A2", committedAddress);
         Assert.Equal("123", committedValue);
@@ -108,7 +108,7 @@ public class ExcelGridInteractionTests
         window.MouseMove(CellCenter(2, 2));
         window.MouseDown(CellCenter(2, 2), MouseButton.Left);
         window.MouseUp(CellCenter(2, 2), MouseButton.Left);
-        window.KeyPress(Key.F2, RawInputModifiers.None);
+        window.KeyPress(Key.F2, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.True(grid.IsEditing);
         Assert.Equal("xin chào", grid.EditorText);
@@ -126,7 +126,7 @@ public class ExcelGridInteractionTests
         window.MouseMove(CellCenter(3, 3));
         window.MouseDown(CellCenter(3, 3), MouseButton.Left);
         window.MouseUp(CellCenter(3, 3), MouseButton.Left);
-        window.KeyPress(Key.Delete, RawInputModifiers.None);
+        window.KeyPress(Key.Delete, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal(string.Empty, committedValue);
     }
@@ -142,7 +142,7 @@ public class ExcelGridInteractionTests
         window.MouseDown(CellCenter(1, 1), MouseButton.Left);
         window.MouseUp(CellCenter(1, 1), MouseButton.Left);
         window.KeyTextInput("abc");
-        window.KeyPress(Key.Escape, RawInputModifiers.None);
+        window.KeyPress(Key.Escape, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.False(grid.IsEditing);
         Assert.False(committed, "Nhấn Esc thì không được ghi giá trị.");
@@ -159,7 +159,7 @@ public class ExcelGridInteractionTests
         window.MouseDown(CellCenter(5, 2), MouseButton.Left);
         window.MouseUp(CellCenter(5, 2), MouseButton.Left);
         window.KeyTextInput("x");
-        window.KeyPress(Key.Tab, RawInputModifiers.None);
+        window.KeyPress(Key.Tab, RawInputModifiers.None, Avalonia.Input.PhysicalKey.None, null);
 
         Assert.Equal("B5", committedAddress);
         Assert.Equal(3, grid.SelectedCol);

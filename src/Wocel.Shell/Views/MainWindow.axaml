@@ -13,7 +13,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#F3F3F3"
         ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
+        WindowDecorations="BorderOnly"
         ExtendClientAreaTitleBarHeightHint="-1"
         FontFamily="Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, sans-serif">
 
@@ -71,7 +71,7 @@
                         <TextBlock Text="Tạo bảng tính, soạn thảo văn bản hoặc xem tệp PDF trực tiếp." FontSize="14" Foreground="#616161" Margin="0,4,0,0"/>
                     </StackPanel>
 
-                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" Margin="0,0,0,32">
+                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*" Margin="0,0,0,32">
                         <Button Name="BtnNewExcelBook" Grid.Column="0" Margin="0,0,10,0" Padding="18" Background="#F1F9F3" BorderBrush="#107C41" BorderThickness="1.5" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <StackPanel Spacing="10">
                                 <Border CornerRadius="6" Width="40" Height="40" Background="#107C41">
@@ -99,13 +99,22 @@
                                 <TextBlock Text=".xlsx .csv .docx .rtf .pdf .wocel" FontSize="12" Foreground="#616161" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Button>
-                        <Button Name="BtnOpenPdfToolsHub" Grid.Column="3" Padding="18" Background="#FBF3FA" BorderBrush="#8E44AD" BorderThickness="1.5" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Button Name="BtnOpenPdfToolsHub" Grid.Column="3" Margin="0,0,10,0" Padding="18" Background="#FBF3FA" BorderBrush="#8E44AD" BorderThickness="1.5" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                             <StackPanel Spacing="10">
                                 <Border CornerRadius="6" Width="40" Height="40" Background="#8E44AD">
                                     <TextBlock Text="🛠" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                                 <TextBlock Text="Bộ công cụ xử lý tệp" FontWeight="Bold" FontSize="15" Foreground="#7D3C98"/>
                                 <TextBlock Text="Gộp, tách, nén, watermark, mật khẩu, ảnh → PDF…" FontSize="12" Foreground="#616161" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="BtnOpenCaptureHub" Grid.Column="4" Padding="18" Background="#FDF6EC" BorderBrush="#D35400" BorderThickness="1.5" CornerRadius="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                            <StackPanel Spacing="10">
+                                <Border CornerRadius="6" Width="40" Height="40" Background="#D35400">
+                                    <TextBlock Text="📸" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Chụp màn hình" FontWeight="Bold" FontSize="15" Foreground="#BA4A00"/>
+                                <TextBlock Text="Print Screen, chỉnh sửa ảnh, tải lên Google Drive" FontSize="12" Foreground="#616161" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -138,6 +147,7 @@
                         <Button Name="BtnAddExcelTab" Content="+ Excel" Padding="8,3" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="11"/>
                         <Button Name="BtnAddWordTab" Content="+ Word" Padding="8,3" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="11"/>
                         <Button Name="BtnTogglePdfTools" Content="🛠 Công cụ tệp" Padding="8,3" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="11"/>
+                        <Button Name="BtnOpenCapture" Content="📸 Chụp màn hình" Padding="8,3" Background="#0C5E31" Foreground="White" BorderThickness="0" CornerRadius="3" FontSize="11"/>
                     </StackPanel>
 
                     <TextBlock Grid.Column="1" Text="{Binding ActiveTab.Title, FallbackValue='Wocel Office'}"
